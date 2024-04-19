@@ -4,8 +4,9 @@ namespace Chess_Backend.Models.Pieces
 {
     public class Rook : Piece
     {
-        public override Color Color { get; }
+        public Rook(Color color, Tile tilePosition) : base(color, tilePosition)
+        {
+        }
 
-        public override Tile? TilePosition { get; set; }
     }
 }

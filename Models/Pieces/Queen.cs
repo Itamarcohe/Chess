@@ -4,9 +4,10 @@ namespace Chess_Backend.Models.Pieces
 {
     public class Queen : Piece
     {
-        public override Color Color { get; }
+        public Queen(Color color, Tile tilePosition) : base(color, tilePosition)
+        {
+        }
 
-        public override Tile? TilePosition { get; set; }
 
     }
 }

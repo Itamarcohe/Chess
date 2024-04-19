@@ -4,8 +4,9 @@ namespace Chess_Backend.Models.Pieces
 {
     public class Pawn : Piece
     {
-        public override Color Color { get; }
+        public Pawn(Color color, Tile tilePosition) : base(color, tilePosition)
+        {
+        }
 
-        public override Tile TilePosition { get; set; }
     }
 }

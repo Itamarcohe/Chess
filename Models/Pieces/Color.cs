@@ -1,6 +1,8 @@
 ﻿namespace Chess_Backend.Models.Pieces
 {
-    public class Color
+    public enum Color
     {
+        White,
+        Black,
     }
 }

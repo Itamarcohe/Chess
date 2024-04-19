@@ -5,12 +5,13 @@ namespace Chess_Backend.Models.Pieces
     public abstract class Piece
     {
 
-        public abstract Color Color { get; }
-        public abstract Tile TilePosition { get; set; }
+        public Color Color { get; private set; }
+        public Tile TilePosition { get; private set; }
 
-        protected Piece()
+        protected Piece(Color color, Tile tilePosition)
         {
-            
+            Color = color;
+            TilePosition = tilePosition;
         }
 
     }
