@@ -10,40 +10,27 @@ namespace Chess_Backend.Models
         public List<Piece>? blackPieces { get; }
 
 
-        public Piece this[int row, int col]
-        {
-            get { return pieces[row, col]; }
-            set { pieces[row, col] = value; }
-        }
-
-        public Piece this[Tile tile]
-        {
-            get { return this[tile.x, tile.y]; }
-            set { this[tile.x, tile.y] = value; }
-        }
-
-
         private readonly Piece[,] pieces = new Piece[8, 8];
 
         public Piece GetPieceByTilePosition(Tile tile)
         {
-            if (tile.x < 0 || tile.x >= 8 || tile.y < 0 || tile.y >= 8)
+            if (tile.Row < 0 || tile.Row >= 8 || tile.Column < 0 || tile.Column >= 8)
             {
                 throw new ArgumentOutOfRangeException("Coordinates are outside of the board boundaries.");
             }
 
-            return pieces[tile.x, tile.y];
+            return pieces[tile.Row, tile.Column];
 
         }
 
-        public bool IsTileOccupied(int x, int y)
+        public bool IsTileOccupied(int row, int column)
         {
-            if (x < 0 || x >= 8 || y < 0 || y >= 8)
+            if (row < 0 || row >= 8 || column < 0 || column >= 8)
             {
                 throw new ArgumentOutOfRangeException("Coordinates are outside of the board boundaries.");
             }
 
-            return pieces[x, y] != null;
+            return pieces[row, column] != null;
         }
 
 

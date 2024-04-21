@@ -8,6 +8,5 @@ namespace Chess_Backend.Models.Pieces
         {
         }
 
-
     }
 }
