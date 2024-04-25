@@ -4,9 +4,7 @@ namespace Chess_Backend.Models.Pieces
 {
     public class Rook : Piece
     {
-        public Rook(Color color, Tile tilePosition) : base(color, tilePosition)
-        {
-        }
-
+        public Rook(Color color, Tile tilePosition) : base(color, tilePosition) { }
+        protected override char GetInternalSymbol() => 'r';
     }
 }

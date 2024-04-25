@@ -4,9 +4,8 @@ namespace Chess_Backend.Models.Pieces
 {
     public class Pawn : Piece
     {
-        public Pawn(Color color, Tile tilePosition) : base(color, tilePosition)
-        {
-        }
+        public Pawn(Color color, Tile tilePosition) : base(color, tilePosition) { }
+         protected override char GetInternalSymbol() => 'p';
 
     }
 }

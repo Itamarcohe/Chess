@@ -2,7 +2,7 @@
 
 namespace Chess_Backend.Models.Pieces
 {
-    public abstract class Piece
+    public abstract class Piece : IPiece
     {
 
         public Color Color { get; private set; }
@@ -13,6 +13,18 @@ namespace Chess_Backend.Models.Pieces
             Color = color;
             TilePosition = tilePosition;
         }
+
+        protected abstract char GetInternalSymbol();
+
+        // create interface of IPiece / Method --> GetSymbol 
+        // getTile Poistion
+        public char GetSymbol()
+        {
+            var symbol = GetInternalSymbol();
+            return Color.Equals(Color.White) ? Char.ToUpper(symbol) : Char.ToLower(symbol);
+        }
+
+
 
     }
 }

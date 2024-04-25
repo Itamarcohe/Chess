@@ -1,4 +1,5 @@
 
+using Chess_Backend.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 
@@ -12,10 +13,13 @@ namespace Chess_Backend
 
             // Add services to the container.
 
+            builder.Services.AddSingleton<GameManager>();
+            builder.Services.AddSingleton<IBoardParserService, BoardParserService>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
 
             // Configure CORS to allow any origin, method, and header. Adjust for production.
             builder.Services.AddCors(options =>

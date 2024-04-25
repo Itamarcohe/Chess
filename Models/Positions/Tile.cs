@@ -1,9 +1,18 @@
-﻿namespace Chess_Backend.Models.Positions
+﻿using System.Data.Common;
+
+namespace Chess_Backend.Models.Positions
 {
     public class Tile
     {
         public int Row { get; set; }
         public int Column { get; set; }
+
+
+        public Tile(int row, int column)
+        {
+            Row = row;
+            Column = column;
+        }
 
         public override bool Equals(object? obj)
         {

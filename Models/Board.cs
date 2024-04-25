@@ -1,38 +1,42 @@
 ﻿using Chess_Backend.Models.Pieces;
 using Chess_Backend.Models.Positions;
-using System.Numerics;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Chess_Backend.Models
 {
-    public class Board : Iboard
+    public class Board : IBoard
     {
-        public List<Piece>? whitePieces { get ; }
-        public List<Piece>? blackPieces { get; }
+        public List<Piece> Pieces { get; private set; }
+        public Dictionary<Tile, Piece> Position { get; private set; }
 
-
-        private readonly Piece[,] pieces = new Piece[8, 8];
-
-        public Piece GetPieceByTilePosition(Tile tile)
+        public Board(List<Piece> pieces)
         {
-            if (tile.Row < 0 || tile.Row >= 8 || tile.Column < 0 || tile.Column >= 8)
-            {
-                throw new ArgumentOutOfRangeException("Coordinates are outside of the board boundaries.");
-            }
+            this.Pieces = pieces;
 
-            return pieces[tile.Row, tile.Column];
-
+            // create a method that will use the pieces list and iterate to create the dictionary 
+            Position = new Dictionary<Tile, Piece>();
+            //
         }
 
+        public Piece? GetPieceByTilePosition(Tile tile)
+        {
+            Position.TryGetValue(tile, out Piece piece);
+            return piece;
+        }
+        public Piece? GetPieceByTilePosition(int row, int column)
+        {
+            return GetPieceByTilePosition(new Tile(row, column));
+        }
+
+        public bool IsTileOccupied(Tile tile)
+        {
+            return Position.ContainsKey(tile);
+        }
         public bool IsTileOccupied(int row, int column)
         {
-            if (row < 0 || row >= 8 || column < 0 || column >= 8)
-            {
-                throw new ArgumentOutOfRangeException("Coordinates are outside of the board boundaries.");
-            }
-
-            return pieces[row, column] != null;
+            throw new NotImplementedException();
         }
-
-
     }
 }

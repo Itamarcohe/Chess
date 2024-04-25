@@ -4,9 +4,8 @@ namespace Chess_Backend.Models.Pieces
 {
     public class Queen : Piece
     {
-        public Queen(Color color, Tile tilePosition) : base(color, tilePosition)
-        {
-        }
+        public Queen(Color color, Tile tilePosition) : base(color, tilePosition) { }
+        protected override char GetInternalSymbol() => 'q';
 
     }
 }

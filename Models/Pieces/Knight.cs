@@ -8,6 +8,7 @@ namespace Chess_Backend.Models.Pieces
         {
         }
 
+        protected override char GetInternalSymbol() => 'n';
 
     }
 }
