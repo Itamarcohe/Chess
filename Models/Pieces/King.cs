@@ -5,6 +5,6 @@ namespace Chess_Backend.Models.Pieces
     public class King : Piece
     {
         public King(Color color, Tile tilePosition) : base(color, tilePosition) { }
-        protected override char GetInternalSymbol() => 'k'; // lowercase 'k' for king
+        protected override char GetInternalSymbol() => 'k'; 
     }
 }

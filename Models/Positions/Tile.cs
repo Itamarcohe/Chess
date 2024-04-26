@@ -6,8 +6,6 @@ namespace Chess_Backend.Models.Positions
     {
         public int Row { get; set; }
         public int Column { get; set; }
-
-
         public Tile(int row, int column)
         {
             Row = row;
@@ -17,8 +15,9 @@ namespace Chess_Backend.Models.Positions
         public override bool Equals(object? obj)
         {
             if (obj == null || obj.GetType() != GetType())
+            {
                 return false;
-
+            }
             Tile other = (Tile)obj;
             return Row == other.Row && Column == other.Column;
         }

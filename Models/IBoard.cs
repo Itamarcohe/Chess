@@ -5,10 +5,9 @@ namespace Chess_Backend.Models
 {
     public interface IBoard 
     {
+        bool IsTileOccupied(Tile tile);
         bool IsTileOccupied(int row, int column);
-
         Piece? GetPieceByTilePosition(Tile tile);
         Piece? GetPieceByTilePosition(int row, int column);
-
     }
 }

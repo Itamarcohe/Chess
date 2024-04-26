@@ -14,12 +14,17 @@ namespace Chess_Backend.Models
         public Board(List<Piece> pieces)
         {
             this.Pieces = pieces;
-
-            // create a method that will use the pieces list and iterate to create the dictionary 
-            Position = new Dictionary<Tile, Piece>();
-            //
+            Position = MapPiecesToDictionary();
         }
-
+        public Dictionary<Tile, Piece> MapPiecesToDictionary()
+        {
+            Dictionary<Tile, Piece> positions = [];
+            foreach (Piece piece in Pieces)
+            {
+                positions[piece.TilePosition] = piece;
+            }
+            return positions;
+        }
         public Piece? GetPieceByTilePosition(Tile tile)
         {
             Position.TryGetValue(tile, out Piece piece);
@@ -36,7 +41,7 @@ namespace Chess_Backend.Models
         }
         public bool IsTileOccupied(int row, int column)
         {
-            throw new NotImplementedException();
+            return Position.ContainsKey(new Tile(row, column));
         }
     }
 }

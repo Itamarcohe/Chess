@@ -6,7 +6,7 @@ namespace Chess_Backend.Services
 {
     public class BoardParserService : IBoardParserService
     {
-        public string BoardToFen(Board board)
+        public string BoardToFen(IBoard board)
         {
             var fenStringBuilder = new StringBuilder();
             for (int row = 0; row < 8; row++)

@@ -4,11 +4,7 @@ namespace Chess_Backend.Models.Pieces
 {
     public class Knight : Piece
     {
-        public Knight(Color color, Tile tilePosition) : base(color, tilePosition)
-        {
-        }
-
+        public Knight(Color color, Tile tilePosition) : base(color, tilePosition) { }
         protected override char GetInternalSymbol() => 'n';
-
     }
 }
