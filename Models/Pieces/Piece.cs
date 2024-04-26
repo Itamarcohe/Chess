@@ -1,30 +1,26 @@
-﻿using Chess_Backend.Models.Positions;
+﻿    using Chess_Backend.Models.Positions;
 
-namespace Chess_Backend.Models.Pieces
-{
-    public abstract class Piece : IPiece
+    namespace Chess_Backend.Models.Pieces
     {
-
-        public Color Color { get; private set; }
-        public Tile TilePosition { get; private set; }
-
-        protected Piece(Color color, Tile tilePosition)
+        public abstract class Piece : IPiece
         {
-            Color = color;
-            TilePosition = tilePosition;
+
+            public Color Color { get; private set; }
+            public Tile TilePosition { get; private set; }
+
+            protected Piece(Color color, Tile tilePosition)
+            {
+                Color = color;
+                TilePosition = tilePosition;
+            }
+
+            protected abstract char GetInternalSymbol();
+
+            public char GetSymbol()
+            {
+                var symbol = GetInternalSymbol();
+                return Color.Equals(Color.White) ? Char.ToUpper(symbol) : Char.ToLower(symbol);
+            }
+
         }
-
-        protected abstract char GetInternalSymbol();
-
-        // create interface of IPiece / Method --> GetSymbol 
-        // getTile Poistion
-        public char GetSymbol()
-        {
-            var symbol = GetInternalSymbol();
-            return Color.Equals(Color.White) ? Char.ToUpper(symbol) : Char.ToLower(symbol);
-        }
-
-
-
     }
-}

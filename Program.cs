@@ -1,4 +1,5 @@
 
+using Chess_Backend.Models;
 using Chess_Backend.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
@@ -15,6 +16,7 @@ namespace Chess_Backend
 
             builder.Services.AddSingleton<GameManager>();
             builder.Services.AddSingleton<IBoardParserService, BoardParserService>();
+            builder.Services.AddSingleton<IBoard, Board>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

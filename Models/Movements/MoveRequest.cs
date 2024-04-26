@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Chess_Backend.Models.Movement
+namespace Chess_Backend.Models.Movements
 {
     public class MoveRequest
     {
