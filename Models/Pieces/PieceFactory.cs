@@ -2,7 +2,7 @@
 
 namespace Chess_Backend.Models.Pieces
 {
-    public class PieceFactory
+    public class PieceFactory : IPieceFactory
     {
         private static readonly Dictionary<char, Func<Color, Tile, Piece>> pieceCreators = new Dictionary<char, Func<Color, Tile, Piece>>
     {
@@ -14,11 +14,15 @@ namespace Chess_Backend.Models.Pieces
         { 'k', (color, tile) => new King(color, tile) }
     };
 
-        public static Piece CreatePiece(char symbol, Tile tile)
+        public Piece CreatePiece(char symbol, Tile tile)
         {
             Color color = char.IsUpper(symbol) ? Color.White : Color.Black;
-            symbol = char.ToLower(symbol);
+            return CreatePieceColor(symbol, tile, color);
+        }
 
+        public Piece CreatePieceColor(char symbol, Tile tile, Color color)
+        {
+            symbol = char.ToLower(symbol);
             if (pieceCreators.TryGetValue(symbol, out var createPiece))
             {
                 return createPiece(color, tile);
@@ -28,5 +32,7 @@ namespace Chess_Backend.Models.Pieces
                 throw new ArgumentException("Invalid piece type.");
             }
         }
+
+
     }
 }

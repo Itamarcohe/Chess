@@ -1,34 +1,40 @@
-﻿using Chess_Backend.Models.Movement;
+﻿using Chess_Backend.Models.Movements;
 using Chess_Backend.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Chess_Backend.Services.Validators
 {
-    public class CompositeValidator : ICompositeValidator
+    public class CompositeValidator 
     {
-        private readonly List<ICompositeValidator> _validators;
+        private List<IMovementValidator> _movementValidators;
 
-        public CompositeValidator()
+        public CompositeValidator(List<IMovementValidator> movementValidators)
         {
-            _validators = new List<ICompositeValidator>();
+            _movementValidators = movementValidators;
         }
 
-        public void AddValidator(ICompositeValidator validator)
-        {
-            _validators.Add(validator);
-        }
 
-        public bool Validate(Movement movement, Board board)
+        public bool IsMovementValid(Movement movement, IBoard currentBoard)
         {
-            foreach (var validator in _validators)
+            foreach (IMovementValidator validator in _movementValidators)
             {
-                if (!validator.Validate(movement, board))
+                if (validator.ShouldValidateMove(movement))
                 {
-                    return false; // If any validator fails, the move is invalid
+                    if (!validator.IsMovementValid(movement, currentBoard))
+                    {
+                        return false;
+                    }
                 }
             }
-            return true; // All validators passed
+            return true;
         }
+
+        public void AddValidator(IMovementValidator validator)
+        {
+            _movementValidators.Add(validator);
+        }
+
 
     }
 }

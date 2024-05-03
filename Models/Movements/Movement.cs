@@ -12,17 +12,5 @@ namespace Chess_Backend.Models.Movements
                 From = from;
                 To = to;
             }
-
-            //public abstract bool IsValid(Board board);  // Validate movement based on the current state of the board
-
-
-            // Classes that will inherit from Movement
-
-            // Normal Movement 
-            // Attack Movement
-            // En Passant Movement 
-            // Castling (Color player)
-            // PawnPromote
-
     }
 }

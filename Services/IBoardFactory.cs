@@ -1,5 +1,5 @@
 ﻿using Chess_Backend.Models;
-using Chess_Backend.Models.Movement;
+using Chess_Backend.Models.Movements;
 
 namespace Chess_Backend.Services
 {

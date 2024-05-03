@@ -12,7 +12,9 @@ namespace Chess_Backend.Utils
             }
 
             int column = position[0] - 'a'; // Convert 'a' to 'h' into 0 to 7
-            int row = position[1] - '1'; // Convert '1' to '8' into 0 to 7
+
+
+            int row = position[1] - '1';    // Convert '1' to '8' into 0 to 7
 
             if (column < 0 || column > 7 || row < 0 || row > 7)
             {

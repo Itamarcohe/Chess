@@ -5,17 +5,28 @@ namespace Chess_Backend.Models.Movements
 {
     public class MovementFactory
     {
-        private readonly Board _board;
+        //private readonly IBoard _board;
 
-        public MovementFactory(Board board)
+        //public MovementFactory(IBoard board)
+        //{
+        //    _board = board;
+        //    Console.WriteLine("MovementFactory initialized with IBoard instance hash: {0}", _board.GetHashCode());
+
+        //}
+
+        public MovementFactory()
         {
-            _board = board;
+            
         }
 
-
-        public Movement CreateMovement(Tile from, Tile to)
+        public Movement CreateMovement(Tile from, Tile to, IBoard _board)
         {
+
             var gamePiece = _board.GetPieceByTilePosition(from);
+
+            
+
+            Console.WriteLine("Creating movement using IBoard instance hash: {Hash}", _board.GetHashCode());
 
             if (gamePiece == null)
             {
@@ -24,7 +35,7 @@ namespace Chess_Backend.Models.Movements
 
             var targetPiece = _board.GetPieceByTilePosition(to);
 
-            // checking if the To (tile) contains a piece means its a attack (capture attempt)
+
 
             if (targetPiece != null && targetPiece!.Color != gamePiece!.Color)
             {
@@ -38,7 +49,7 @@ namespace Chess_Backend.Models.Movements
             if (gamePiece is Pawn && (to.Row == 7 || to.Row == 0))
             {
                 // default promoting to queen for now
-               return new PawnPromotionMovement(from, to, Queen);
+               return new PawnPromotionMovement(from, to, 'q');
             }
 
 

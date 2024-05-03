@@ -1,16 +1,20 @@
-﻿using Chess_Backend.Models.Movement;
+﻿using Chess_Backend.Models.Movements;
 using Chess_Backend.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Chess_Backend.Services.Validators
 {
-    public class KingCheckValidator : ICompositeValidator
+    public class KingCheckValidator : IMovementValidator
     {
-        public bool Validate(Movement movement, Board board)
+        public bool IsMovementValid(Movement movement, IBoard currentBoard)
         {
-            // This would simulate the move and check if the king is in check
-            // Simplified example; actual implementation would require game simulation
             return true;
         }
+
+        public bool ShouldValidateMove(Movement movement)
+        {
+            return true;
+        }
+
     }
 }
