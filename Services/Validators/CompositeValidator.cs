@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Chess_Backend.Services.Validators
 {
-    public class CompositeValidator 
+    public class CompositeValidator : ICompositeValidator
     {
         private List<IMovementValidator> _movementValidators;
 

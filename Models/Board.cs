@@ -6,29 +6,30 @@ namespace Chess_Backend.Models
     {
         public List<Piece> Pieces { get; private set; }
         public Dictionary<Tile, Piece> Positions { get; private set; }
-
+        public Color currentTurnColor { get; private set; }
 
         public Board()
         {
+            Pieces = new List<Piece>();
+            Positions = new Dictionary<Tile, Piece>();
+            MapPiecesToDictionary();
+
         }
 
-        public Board(List<Piece> pieces)
+        public Board(List<Piece> pieces, Color currentTurnColor)
         {
             this.Pieces = pieces;
+            this.currentTurnColor = currentTurnColor;
             Positions = new Dictionary<Tile, Piece>();
             MapPiecesToDictionary();
         }
 
         public void MapPiecesToDictionary()
         {
-            Console.WriteLine("Intalized Map to dictiornary entered");
             foreach (Piece piece in Pieces)
             {
                 Positions[piece.TilePosition] = piece;
             }
-
-            Console.WriteLine("Positions dictionary after intializzeed: {0}", Positions.Count());
-
         }
 
         public Piece? GetPieceByTilePosition(Tile tile)

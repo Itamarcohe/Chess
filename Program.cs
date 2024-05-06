@@ -14,38 +14,26 @@ namespace Chess_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            //builder.Services.AddTransient<IBoard, Board>();
-
-
-            // Dor in case u want to make it singleton uncomment it and comment the line 28
-            //builder.Services.AddSingleton<IBoard, Board>();
-
-
-            // Scoped lifecycle for the Board
-
-            builder.Services.AddScoped<IBoard, Board>();
-
-            builder.Services.AddTransient<MovementFactory>();
-            builder.Services.AddTransient<IPieceFactory, PieceFactory>();
-            builder.Services.AddTransient<IBoardParserService, BoardParserService>();
-            builder.Services.AddTransient<IBoardFactory, BoardFactory>();
+            builder.Services.AddSingleton<IBoardHolder, BoardHolder>();
+            builder.Services.AddSingleton<MovementFactory>();
+            builder.Services.AddSingleton<IPieceFactory, PieceFactory>();
+            builder.Services.AddSingleton<IBoardParserService, BoardParserService>();
+            builder.Services.AddSingleton<IBoardFactory, BoardFactory>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            // Register validators
-            builder.Services.AddTransient<KingCheckValidator>();
-            builder.Services.AddTransient<CaptureSameColorValidator>();
-            // Register the CompositeValidator with a factory to inject the list of validators
-            builder.Services.AddSingleton<CompositeValidator>(serviceProvider =>
+            // Register individual validators as singletons
+            builder.Services.AddSingleton<KingCheckValidator>();
+            builder.Services.AddSingleton<CaptureSameColorValidator>();
+            builder.Services.AddSingleton<ICompositeValidator>(serviceProvider =>
             {
                 var kingCheckValidator = serviceProvider.GetRequiredService<KingCheckValidator>();
                 var captureSameColorValidator = serviceProvider.GetRequiredService<CaptureSameColorValidator>();
                 var validators = new List<IMovementValidator> { kingCheckValidator, captureSameColorValidator };
                 return new CompositeValidator(validators);
             });
-            // Configure CORS to allow any origin, method, and header. Adjust for production.
+
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", policy =>

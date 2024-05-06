@@ -38,6 +38,15 @@ namespace Chess_Backend.Services
                     fenStringBuilder.Append('/');
                 }
             }
+
+            if (board.currentTurnColor == Color.White)
+            {
+                fenStringBuilder.Append(" W");
+            } else
+            {
+                fenStringBuilder.Append(" B");
+            }
+
             return fenStringBuilder.ToString();
         }
     }

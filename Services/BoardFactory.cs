@@ -9,19 +9,14 @@ namespace Chess_Backend.Services
     {
 
         
-        private readonly IPieceFactory _pieceFactory;
+        private readonly IPieceFactory pieceFactory;
         public BoardFactory(IPieceFactory pieceFactory)
         {
-            _pieceFactory = pieceFactory;
+            this.pieceFactory = pieceFactory;
         }
 
-        //Movement 
 
-        //public Tile From { get; private set; }
-        //public Tile To { get; private set; }
-
-
-        public IBoard CreateNewBoard(IBoard board, Movement movement)
+        public IBoard CreateNewBoard(IBoard board, Movement movement, Color oldTurnColor)
         {
 
             List<Piece> newPieces = new List<Piece>();
@@ -30,43 +25,46 @@ namespace Chess_Backend.Services
             {
                 foreach (Piece piece in board.Pieces)
                 {
-                    if (piece.TilePosition == movement.From)
+                    if (piece.TilePosition.Equals(movement.From))
                     {
-
-                        newPiece = _pieceFactory.CreatePieceColor(piece.GetSymbol(), movement.To, piece.Color);
+                        newPiece = pieceFactory.CreatePieceColor(piece.GetSymbol(), movement.To, piece.Color);
                         newPieces.Add(newPiece);
                     }
                     else
                     {
-                        newPiece = _pieceFactory.CreatePieceColor(piece.GetSymbol(), piece.TilePosition, piece.Color);
-                        newPieces.Add(newPiece);
+                        newPieces.Add(pieceFactory.CreatePiece(piece));
                     }
 
                 }
             }
 
-            Board newBoard = new Board(newPieces);
+            Color newTurnColor;
+            if (oldTurnColor == Color.White)
+            {
+                 newTurnColor = Color.Black;
+            } else
+            {
+                 newTurnColor = Color.White;
+            }
+
+            Board newBoard = new Board(newPieces, newTurnColor);
+
             return newBoard;
         }
 
 
         public IBoard InitializeNewBoard()
         {
-            // Set up pieces for white
             List<Piece> pieces = new List<Piece>();
 
-            SetupInitialRow(Color.White, 6, pieces); // Pawns
-            SetupBackRow(Color.White, 7, pieces);    // Other pieces
-            // Set up pieces for black
-            SetupInitialRow(Color.Black, 1, pieces); // Pawns
-            SetupBackRow(Color.Black, 0, pieces);    // Other pieces
+            SetupInitialRow(Color.White, 6, pieces);
+            SetupBackRow(Color.White, 7, pieces); 
+            SetupInitialRow(Color.Black, 1, pieces);
+            SetupBackRow(Color.Black, 0, pieces);   
 
-            IBoard intializedBoard = new Board(pieces);
-
-            intializedBoard.MapPiecesToDictionary();
-
-            Console.WriteLine("Board initialized with {0} pieces.", pieces.Count);
-            return intializedBoard;
+            IBoard initializedBoard = new Board(pieces, Color.White);
+            initializedBoard.MapPiecesToDictionary();
+            return initializedBoard;
         }
 
         private void SetupInitialRow(Color color, int row, List<Piece> pieces)

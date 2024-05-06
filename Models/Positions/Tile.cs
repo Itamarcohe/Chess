@@ -22,6 +22,7 @@ namespace Chess_Backend.Models.Positions
             return Row == other.Row && Column == other.Column;
         }
 
+
         public override int GetHashCode()
         {
             unchecked

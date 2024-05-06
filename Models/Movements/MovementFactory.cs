@@ -5,15 +5,6 @@ namespace Chess_Backend.Models.Movements
 {
     public class MovementFactory
     {
-        //private readonly IBoard _board;
-
-        //public MovementFactory(IBoard board)
-        //{
-        //    _board = board;
-        //    Console.WriteLine("MovementFactory initialized with IBoard instance hash: {0}", _board.GetHashCode());
-
-        //}
-
         public MovementFactory()
         {
             
@@ -24,18 +15,12 @@ namespace Chess_Backend.Models.Movements
 
             var gamePiece = _board.GetPieceByTilePosition(from);
 
-            
-
-            Console.WriteLine("Creating movement using IBoard instance hash: {Hash}", _board.GetHashCode());
-
             if (gamePiece == null)
             {
                 throw new InvalidOperationException("No piece at the starting position.");
             }
 
             var targetPiece = _board.GetPieceByTilePosition(to);
-
-
 
             if (targetPiece != null && targetPiece!.Color != gamePiece!.Color)
             {

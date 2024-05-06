@@ -20,6 +20,20 @@ namespace Chess_Backend.Models.Pieces
             return CreatePieceColor(symbol, tile, color);
         }
 
+        public Piece CreatePiece(Piece piece)
+        {
+            Type type = piece.GetType();
+
+            var constructor = type.GetConstructor(new Type[] { type });
+
+            if (constructor == null)
+            {
+                throw new InvalidOperationException($"No cloning constructor found for type {type.Name}");
+            }
+
+            return (Piece)constructor.Invoke(new object[] { piece });
+        }
+
         public Piece CreatePieceColor(char symbol, Tile tile, Color color)
         {
             symbol = char.ToLower(symbol);
