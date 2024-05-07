@@ -6,7 +6,7 @@ namespace Chess_Backend.Models
     {
         public List<Piece> Pieces { get; private set; }
         public Dictionary<Tile, Piece> Positions { get; private set; }
-        public Color currentTurnColor { get; private set; }
+        public Color CurrentTurnColor { get; private set; }
 
         public Board()
         {
@@ -19,12 +19,12 @@ namespace Chess_Backend.Models
         public Board(List<Piece> pieces, Color currentTurnColor)
         {
             this.Pieces = pieces;
-            this.currentTurnColor = currentTurnColor;
+            this.CurrentTurnColor = currentTurnColor;
             Positions = new Dictionary<Tile, Piece>();
             MapPiecesToDictionary();
         }
 
-        public void MapPiecesToDictionary()
+        private void MapPiecesToDictionary()
         {
             foreach (Piece piece in Pieces)
             {

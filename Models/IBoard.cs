@@ -10,8 +10,7 @@ namespace Chess_Backend.Models
         bool IsTileOccupied(int row, int column);
         Piece? GetPieceByTilePosition(Tile tile);
         Piece? GetPieceByTilePosition(int row, int column);
-        Color currentTurnColor { get; }
+        Color CurrentTurnColor { get; }
         List<Piece> Pieces { get; }
-        void MapPiecesToDictionary();
     }
 }

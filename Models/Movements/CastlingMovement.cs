@@ -5,10 +5,8 @@ namespace Chess_Backend.Models.Movements
 {
     public class CastlingMovement : Movement
     {
-        public Color PlayerColor { get; private set; }
-        public CastlingMovement(Tile from, Tile to, Color playerColor) : base(from, to)
+        public CastlingMovement(Tile from, Tile to) : base(from, to)
         {
-            PlayerColor = playerColor;
         }
     }
 }

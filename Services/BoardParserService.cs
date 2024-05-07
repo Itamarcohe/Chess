@@ -39,7 +39,7 @@ namespace Chess_Backend.Services
                 }
             }
 
-            if (board.currentTurnColor == Color.White)
+            if (board.CurrentTurnColor == Color.White)
             {
                 fenStringBuilder.Append(" W");
             } else

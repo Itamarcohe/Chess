@@ -63,7 +63,6 @@ namespace Chess_Backend.Services
             SetupBackRow(Color.Black, 0, pieces);   
 
             IBoard initializedBoard = new Board(pieces, Color.White);
-            initializedBoard.MapPiecesToDictionary();
             return initializedBoard;
         }
 

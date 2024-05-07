@@ -41,7 +41,7 @@ namespace Chess_Backend.Models.Movements
             // Castling (simplified logic)
             if (gamePiece is King && (Math.Abs(to.Column - from.Column) == 2))
             {
-                 return new CastlingMovement(from, to, gamePiece.Color);
+                 return new CastlingMovement(from, to);
             }
 
             // Default to Normal Movement if none of the special conditions are met
