@@ -11,17 +11,15 @@ namespace Chess_Backend.Utils
                 throw new ArgumentException("Invalid chess position.");
             }
 
-            int column = position[0] - 'a'; // Convert 'a' to 'h' into 0 to 7
-
-
-            int row = position[1] - '1';    // Convert '1' to '8' into 0 to 7
+            int column = position[0] - 'a'; 
+            int row = position[1] - '1';    
 
             if (column < 0 || column > 7 || row < 0 || row > 7)
             {
                 throw new ArgumentException("Chess position out of board range.");
             }
 
-            return new Tile(row, column);
+            return new Tile(column, row);
         }
 
     }

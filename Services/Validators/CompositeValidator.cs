@@ -14,7 +14,6 @@ namespace Chess_Backend.Services.Validators
             _movementValidators = movementValidators;
         }
 
-
         public bool IsMovementValid(Movement movement, IBoard currentBoard)
         {
             foreach (IMovementValidator validator in _movementValidators)
@@ -29,12 +28,5 @@ namespace Chess_Backend.Services.Validators
             }
             return true;
         }
-
-        public void AddValidator(IMovementValidator validator)
-        {
-            _movementValidators.Add(validator);
-        }
-
-
     }
 }

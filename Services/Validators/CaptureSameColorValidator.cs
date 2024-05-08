@@ -5,14 +5,11 @@ namespace Chess_Backend.Services.Validators
 {
     public class CaptureSameColorValidator : IMovementValidator
     {
-        // Determines if this validator should check the move
         public bool ShouldValidateMove(Movement movement)
         {
-            // You can add conditions here to decide whether to apply this validator
-            return true;  // For now, always validate
+            return true;  
         }
 
-        // Validates the movement according to this validator's rules
         public bool IsMovementValid(Movement movement, IBoard board)
         {
             var fromPiece = board.GetPieceByTilePosition(movement.From);
@@ -20,7 +17,7 @@ namespace Chess_Backend.Services.Validators
 
             if (targetPiece != null && fromPiece != null && targetPiece.Color == fromPiece.Color)
             {
-                return false; // Cannot capture a piece of the same color
+                return false;
             }
             return true;
         }

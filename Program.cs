@@ -25,11 +25,16 @@ namespace Chess_Backend
             // Register individual validators as singletons
             builder.Services.AddSingleton<KingCheckValidator>();
             builder.Services.AddSingleton<CaptureSameColorValidator>();
+            builder.Services.AddSingleton<PlayerTurnValidator>();
             builder.Services.AddSingleton<ICompositeValidator>(serviceProvider =>
             {
                 var kingCheckValidator = serviceProvider.GetRequiredService<KingCheckValidator>();
                 var captureSameColorValidator = serviceProvider.GetRequiredService<CaptureSameColorValidator>();
-                var validators = new List<IMovementValidator> { kingCheckValidator, captureSameColorValidator };
+                var PlayerTurnValidator = serviceProvider.GetRequiredService<PlayerTurnValidator>();
+                var validators = new List<IMovementValidator> {
+                    kingCheckValidator,
+                    captureSameColorValidator,
+                    PlayerTurnValidator };
                 return new CompositeValidator(validators);
             });
 

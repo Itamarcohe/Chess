@@ -2,6 +2,7 @@ using Chess_Backend.Models;
 using Chess_Backend.Models.Movements;
 using Chess_Backend.Models.Positions;
 using Chess_Backend.Services;
+using Chess_Backend.Services.MoveGenerator;
 using Chess_Backend.Services.Validators;
 using Chess_Backend.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -36,9 +37,21 @@ namespace Chess_Backend.Controllers
             this.boardHolder = boardHolder;
         }
 
+
+
         [HttpGet("GetInitialFen")]
         public IActionResult GetInitialFen()
         {
+
+            RookTilesGenerator rookG = new RookTilesGenerator();
+
+            var vectors = rookG.MoveVectors;
+            var vectors2 = rookG.MoveVectors;
+            vectors2[0] = (6, 6);
+
+
+
+
             try
             {
                 boardHolder.SetBoard(boardFactory.InitializeNewBoard());
@@ -60,6 +73,7 @@ namespace Chess_Backend.Controllers
             {
                 var fromTile = ChessNotationConverter.ConvertToTile(request.From);
                 var toTile = ChessNotationConverter.ConvertToTile(request.To);
+
                 IBoard currentBoard = boardHolder.GetBoard();
                 var movement = _movementFactory.CreateMovement(fromTile, toTile, currentBoard);
                 if (_validator.IsMovementValid(movement, currentBoard))

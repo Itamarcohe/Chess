@@ -70,7 +70,7 @@ namespace Chess_Backend.Services
         {
             for (int col = 0; col < 8; col++)
             {
-                var tile = new Tile(row, col);
+                var tile = new Tile(col, row);
                 var pawn = new Pawn(color, tile);
                 pieces.Add(pawn);
             }
@@ -79,14 +79,14 @@ namespace Chess_Backend.Services
 
         private void SetupBackRow(Color color, int row, List<Piece> pieces)
         {
-            pieces.Add(new Rook(color, new Tile(row, 0)));
-            pieces.Add(new Knight(color, new Tile(row, 1)));
-            pieces.Add(new Bishop(color, new Tile(row, 2)));
-            pieces.Add(new Queen(color, new Tile(row, 3)));
-            pieces.Add(new King(color, new Tile(row, 4)));
-            pieces.Add(new Bishop(color, new Tile(row, 5)));
-            pieces.Add(new Knight(color, new Tile(row, 6)));
-            pieces.Add(new Rook(color, new Tile(row, 7)));
+            pieces.Add(new Rook(color, new Tile(0, row)));
+            pieces.Add(new Knight(color, new Tile(1, row)));
+            pieces.Add(new Bishop(color, new Tile(2, row)));
+            pieces.Add(new Queen(color, new Tile(3, row)));
+            pieces.Add(new King(color, new Tile(4, row)));
+            pieces.Add(new Bishop(color, new Tile(5, row)));
+            pieces.Add(new Knight(color, new Tile(6, row)));
+            pieces.Add(new Rook(color, new Tile(7, row)));
         }
 
     }

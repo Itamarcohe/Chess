@@ -39,7 +39,7 @@ namespace Chess_Backend.Models
         }
         public Piece? GetPieceByTilePosition(int row, int column)
         {
-            return GetPieceByTilePosition(new Tile(row, column));
+            return GetPieceByTilePosition(new Tile(column, row));
         }
 
         public bool IsTileOccupied(Tile tile)
@@ -48,7 +48,7 @@ namespace Chess_Backend.Models
         }
         public bool IsTileOccupied(int row, int column)
         {
-            return Positions.ContainsKey(new Tile(row, column));
+            return Positions.ContainsKey(new Tile(column, row));
         }
     }
 }
