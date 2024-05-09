@@ -57,10 +57,10 @@ namespace Chess_Backend.Services
         {
             List<Piece> pieces = new List<Piece>();
 
-            SetupInitialRow(Color.White, 6, pieces);
-            SetupBackRow(Color.White, 7, pieces); 
-            SetupInitialRow(Color.Black, 1, pieces);
-            SetupBackRow(Color.Black, 0, pieces);   
+            SetupInitialRow(Color.White, 1, pieces);
+            SetupBackRow(Color.White, 0, pieces); 
+            SetupInitialRow(Color.Black, 6, pieces);
+            SetupBackRow(Color.Black, 7, pieces);   
 
             IBoard initializedBoard = new Board(pieces, Color.White);
             return initializedBoard;

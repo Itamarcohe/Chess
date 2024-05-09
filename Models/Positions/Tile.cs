@@ -34,6 +34,12 @@ namespace Chess_Backend.Models.Positions
             }
         }
 
+        public override string ToString()
+        {
+            return $"({Column},{Row})";
+        }
+
+
     }
 
 }

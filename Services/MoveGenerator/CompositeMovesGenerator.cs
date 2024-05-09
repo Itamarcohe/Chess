@@ -4,20 +4,33 @@ using Chess_Backend.Models;
 
 namespace Chess_Backend.Services.MoveGenerator
 {
-    public class CompositeMovesGenerator
+    public class CompositeMovesGenerator : IMoveToTilesGenerator
     {
-        private List<IMoveToTilesGenerator> _validators;
-        public CompositeMovesGenerator(List<IMoveToTilesGenerator> validators)
+        private List<IMoveToTilesGenerator> _generators;
+        public CompositeMovesGenerator(List<IMoveToTilesGenerator> generators)
         {
-            _validators = validators;
+            _generators = generators;
         }
+
+        public bool AppliesTo(Piece piece)
+        {
+            foreach (var generator in _generators)
+            {
+                if (generator.AppliesTo(piece))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public List<Tile> GetPossibleMoves(Piece piece)
         {
-            foreach (var validator in _validators)
+            foreach (var generator in _generators)
             {
-                if (validator.AppliesTo(piece))
+                if (generator.AppliesTo(piece))
                 {
-                    return validator.GetPossibleMoves(piece);
+                    return generator.GetPossibleMoves(piece);
                 }
             }
             throw new InvalidOperationException("No applicable validator found for this piece type.");

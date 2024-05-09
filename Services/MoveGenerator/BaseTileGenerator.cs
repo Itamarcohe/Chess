@@ -18,7 +18,7 @@ namespace Chess_Backend.Services.MoveGenerator
                 int newY = piece.TilePosition.Row + moveVector.Item2;
                 if (BoardUtils.IsWithinBoardBounds(newX, newY))
                 {
-                    Tile newTile = new Tile(newY, newX);
+                    Tile newTile = new Tile(newX, newY);
                     moves.Add(newTile);
                 }
             }

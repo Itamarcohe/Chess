@@ -8,8 +8,7 @@ namespace Chess_Backend.Services.MoveGenerator
 {
     public class RookTilesGenerator : BaseTileGenerator
     {
-        public override (int, int)[] MoveVectors => AllVectors;
-
+        public override (int, int)[] MoveVectors => GetVectors();
         private (int, int)[] AllVectors;
         public RookTilesGenerator()
         {
@@ -18,7 +17,7 @@ namespace Chess_Backend.Services.MoveGenerator
         private (int, int)[] GetVectors()
         {
             var initial = new[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
-            (int, int)[] vectors = new (int, int)[4 * 7 + 4];
+            (int, int)[] vectors = new (int, int)[28];
             int index = 0;
             foreach (var vector in initial)
             {
@@ -34,7 +33,6 @@ namespace Chess_Backend.Services.MoveGenerator
                         vectors[index++] = (0, yDir * j);
                 }
             }
-
             return vectors;
         }
         public override bool AppliesTo(Piece piece)

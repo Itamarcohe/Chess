@@ -1,5 +1,6 @@
 using Chess_Backend.Models;
 using Chess_Backend.Models.Movements;
+using Chess_Backend.Models.Pieces;
 using Chess_Backend.Models.Positions;
 using Chess_Backend.Services;
 using Chess_Backend.Services.MoveGenerator;
@@ -19,13 +20,15 @@ namespace Chess_Backend.Controllers
         private readonly IBoardParserService _boardParserService;
         private readonly IBoardFactory boardFactory;
         private readonly IBoardHolder boardHolder;
+        private readonly IMoveToTilesGenerator compositeMovesGenerator;
 
         public ChessManagerController(ILogger<ChessManagerController> logger,
             MovementFactory movementFactory,
             IBoardParserService boardParserService,
             ICompositeValidator compositeValidator,
             IBoardFactory boardFactory,
-            IBoardHolder boardHolder
+            IBoardHolder boardHolder,
+            IMoveToTilesGenerator compositeMovesGenerator
             )
         {
             _logger = logger;
@@ -35,6 +38,7 @@ namespace Chess_Backend.Controllers
             _boardParserService = boardParserService;
             this.boardFactory = boardFactory;
             this.boardHolder = boardHolder;
+            this.compositeMovesGenerator = compositeMovesGenerator;
         }
 
 
@@ -42,16 +46,6 @@ namespace Chess_Backend.Controllers
         [HttpGet("GetInitialFen")]
         public IActionResult GetInitialFen()
         {
-
-            RookTilesGenerator rookG = new RookTilesGenerator();
-
-            var vectors = rookG.MoveVectors;
-            var vectors2 = rookG.MoveVectors;
-            vectors2[0] = (6, 6);
-
-
-
-
             try
             {
                 boardHolder.SetBoard(boardFactory.InitializeNewBoard());
@@ -73,16 +67,24 @@ namespace Chess_Backend.Controllers
             {
                 var fromTile = ChessNotationConverter.ConvertToTile(request.From);
                 var toTile = ChessNotationConverter.ConvertToTile(request.To);
-
                 IBoard currentBoard = boardHolder.GetBoard();
                 var movement = _movementFactory.CreateMovement(fromTile, toTile, currentBoard);
                 if (_validator.IsMovementValid(movement, currentBoard))
                 {
-                    var oldTurnColor = currentBoard.GetPieceByTilePosition(fromTile)!.Color;
-                    IBoard newBoard = boardFactory.CreateNewBoard(currentBoard, movement, oldTurnColor);
-                    boardHolder.SetBoard(newBoard);
-                    string NewBoardFen = _boardParserService.BoardToFen(newBoard);
-                    return Ok(new { Fen = NewBoardFen });
+                    Piece piece = currentBoard.GetPieceByTilePosition(fromTile)!;
+                    var possibleMoves = compositeMovesGenerator.GetPossibleMoves(piece);
+                    var validMove = possibleMoves.Any(tile => tile.Equals(toTile));
+                    if (validMove)
+                    {
+                        var oldTurnColor = currentBoard.GetPieceByTilePosition(fromTile)!.Color;
+                        IBoard newBoard = boardFactory.CreateNewBoard(currentBoard, movement, oldTurnColor);
+                        boardHolder.SetBoard(newBoard);
+                        string NewBoardFen = _boardParserService.BoardToFen(newBoard);
+                        return Ok(new { Fen = NewBoardFen });
+                    } else
+                    {
+                        return BadRequest(new { Message = $"Cant move ur {piece} from: {request.From} to: {request.To}" });
+                    }
                 }
                 else
                 {

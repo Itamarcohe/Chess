@@ -11,8 +11,8 @@ namespace Chess_Backend.Utils
                 throw new ArgumentException("Invalid chess position.");
             }
 
-            int column = position[0] - 'a'; 
-            int row = position[1] - '1';    
+            int column = position[0] - 'a'; // check with + 1  
+            int row = position[1] - '1';    // check with + 1
 
             if (column < 0 || column > 7 || row < 0 || row > 7)
             {

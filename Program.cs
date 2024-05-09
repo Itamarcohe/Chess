@@ -3,8 +3,10 @@ using Chess_Backend.Models;
 using Chess_Backend.Models.Movements;
 using Chess_Backend.Models.Pieces;
 using Chess_Backend.Services;
+using Chess_Backend.Services.MoveGenerator;
 using Chess_Backend.Services.Validators;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 
 namespace Chess_Backend
@@ -37,6 +39,33 @@ namespace Chess_Backend
                     PlayerTurnValidator };
                 return new CompositeValidator(validators);
             });
+
+            // Register individual validators as singletons for the CompositeMoveGenerator
+            builder.Services.AddSingleton<RookTilesGenerator>();
+            builder.Services.AddSingleton<BishopTilesGenerator>();
+            builder.Services.AddSingleton<KnightTilesGenerator>();
+            builder.Services.AddSingleton<PawnTilesGenerator>();
+            builder.Services.AddSingleton<KingTilesGenerator>();
+            builder.Services.AddSingleton<QueenTilesGenerator>();
+            builder.Services.AddSingleton<IMoveToTilesGenerator>(serviceProvider =>
+            {
+                var rookGenerator = serviceProvider.GetRequiredService<RookTilesGenerator>();
+                var bishopGenerator = serviceProvider.GetRequiredService<BishopTilesGenerator>();
+                var knightGenerator = serviceProvider.GetRequiredService<KnightTilesGenerator>();
+                var pawnGenerator = serviceProvider.GetRequiredService<PawnTilesGenerator>();
+                var kingGenerator = serviceProvider.GetRequiredService<KingTilesGenerator>();
+                var queenGenerator = serviceProvider.GetRequiredService<QueenTilesGenerator>();
+                var generators = new List<IMoveToTilesGenerator> {
+                    rookGenerator,
+                    bishopGenerator,
+                    knightGenerator,
+                    pawnGenerator,
+                    kingGenerator,
+                    queenGenerator
+                };
+                return new CompositeMovesGenerator(generators);
+            });
+
 
 
             builder.Services.AddCors(options =>

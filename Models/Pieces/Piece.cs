@@ -30,5 +30,14 @@ namespace Chess_Backend.Models.Pieces
             return Color.Equals(Color.White) ? Char.ToUpper(symbol) : Char.ToLower(symbol);
         }
 
+        public override string ToString()
+        {
+            // Basic implementation that can be overridden or extended in derived classes
+            string pieceType = GetType().Name;
+            string colorText = Color.ToString();
+            string positionText = TilePosition.ToString();
+            return $"{pieceType}, {colorText}, {positionText}";
+        }
+
     }
 }
