@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Chess_Backend.Models.Movement
+namespace Chess_Backend.Models.Movements
 {
     public class MoveRequest
     {
         [Required]
         [RegularExpression(@"^[a-h][1-8]$", ErrorMessage = "From position is not valid.")]
-        public string From { get; set; }
+        public required string From { get; set; }
 
         [Required]
         [RegularExpression(@"^[a-h][1-8]$", ErrorMessage = "To position is not valid.")]
-        public string To { get; set; }
+        public required string To { get; set; }
 
     }
 }

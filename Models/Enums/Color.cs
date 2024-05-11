@@ -1,4 +1,4 @@
-﻿namespace Chess_Backend.Models.Pieces
+﻿namespace Chess_Backend.Models.Enums
 {
     public enum Color
     {

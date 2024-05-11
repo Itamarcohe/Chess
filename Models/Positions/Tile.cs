@@ -4,12 +4,12 @@ namespace Chess_Backend.Models.Positions
 {
     public class Tile
     {
-        public int Row { get; set; }
         public int Column { get; set; }
-        public Tile(int row, int column)
+        public int Row { get; set; }
+        public Tile(int column, int row)
         {
-            Row = row;
             Column = column;
+            Row = row;
         }
 
         public override bool Equals(object? obj)
@@ -22,6 +22,7 @@ namespace Chess_Backend.Models.Positions
             return Row == other.Row && Column == other.Column;
         }
 
+
         public override int GetHashCode()
         {
             unchecked
@@ -32,6 +33,12 @@ namespace Chess_Backend.Models.Positions
                 return hash;
             }
         }
+
+        public override string ToString()
+        {
+            return $"({Column},{Row})";
+        }
+
 
     }
 

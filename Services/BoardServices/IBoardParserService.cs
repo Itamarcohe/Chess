@@ -1,6 +1,6 @@
 ﻿using Chess_Backend.Models;
 
-namespace Chess_Backend.Services
+namespace Chess_Backend.Services.BoardServices
 {
     public interface IBoardParserService
     {

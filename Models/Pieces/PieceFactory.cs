@@ -1,8 +1,10 @@
-﻿using Chess_Backend.Models.Positions;
+﻿using Chess_Backend.Models.Enums;
+using Chess_Backend.Models.Pieces.SubPieces;
+using Chess_Backend.Models.Positions;
 
 namespace Chess_Backend.Models.Pieces
 {
-    public class PieceFactory
+    public class PieceFactory : IPieceFactory
     {
         private static readonly Dictionary<char, Func<Color, Tile, Piece>> pieceCreators = new Dictionary<char, Func<Color, Tile, Piece>>
     {
@@ -13,12 +15,24 @@ namespace Chess_Backend.Models.Pieces
         { 'q', (color, tile) => new Queen(color, tile) },
         { 'k', (color, tile) => new King(color, tile) }
     };
-
-        public static Piece CreatePiece(char symbol, Tile tile)
+        public Piece CreatePiece(char symbol, Tile tile)
         {
             Color color = char.IsUpper(symbol) ? Color.White : Color.Black;
+            return CreatePieceColor(symbol, tile, color);
+        }
+        public Piece CreatePiece(Piece piece)
+        {
+            Type type = piece.GetType();
+            var constructor = type.GetConstructor(new Type[] { type });
+            if (constructor == null)
+            {
+                throw new InvalidOperationException($"No cloning constructor found for type {type.Name}");
+            }
+            return (Piece)constructor.Invoke(new object[] { piece });
+        }
+        public Piece CreatePieceColor(char symbol, Tile tile, Color color)
+        {
             symbol = char.ToLower(symbol);
-
             if (pieceCreators.TryGetValue(symbol, out var createPiece))
             {
                 return createPiece(color, tile);

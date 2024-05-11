@@ -1,5 +1,9 @@
-using Chess_Backend.Models.Movement;
-using Chess_Backend.Services;
+using Chess_Backend.Models;
+using Chess_Backend.Models.Movements;
+using Chess_Backend.Models.Pieces;
+using Chess_Backend.Services.BoardServices;
+using Chess_Backend.Services.Validators;
+using Chess_Backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chess_Backend.Controllers
@@ -8,58 +12,62 @@ namespace Chess_Backend.Controllers
     [Route("[controller]")]
     public class ChessManagerController : ControllerBase
     {
-
-
         private readonly ILogger<ChessManagerController> _logger;
+        private readonly MovementFactory _movementFactory;
+        private readonly ICompositeValidator _validator;
+        private readonly IBoardParserService _boardParserService;
+        private readonly IBoardFactory boardFactory;
+        private readonly IBoardHolder boardHolder;
 
-        private readonly GameManager _gameManager;
-
-
-        public ChessManagerController(ILogger<ChessManagerController> logger, GameManager gameManager)
+        public ChessManagerController(ILogger<ChessManagerController> logger,
+            MovementFactory movementFactory,
+            IBoardParserService boardParserService,
+            ICompositeValidator compositeValidator,
+            IBoardFactory boardFactory,
+            IBoardHolder boardHolder
+            )
         {
             _logger = logger;
-            _gameManager = gameManager;
+            _movementFactory = movementFactory;
+            _boardParserService = boardParserService;
+            _validator = compositeValidator;
+            this.boardFactory = boardFactory;
+            this.boardHolder = boardHolder;
         }
 
-        [HttpPost("StartNewGame")]
-        public ActionResult<string> StartNewGame()
-        {
-            _gameManager.StartNewGame();
-            _logger.LogInformation("Started a new chess game.");
-            return Ok(_gameManager.CurrentFen);
-        }
-
-
-        [HttpGet("GetCurrentFen")]
-        public ActionResult<string> GetCurrentFen()
-        {
-            _logger.LogInformation("Retrieving current FEN.");
-            return Ok(_gameManager.CurrentFen);
-        }
-
-
-        [HttpPost("ValidateMove")]
-        public ActionResult<string> ValidateMove([FromBody] MoveRequest move)
+        [HttpGet("GetInitialFen")]
+        public IActionResult GetInitialFen()
         {
             try
             {
-                if (_gameManager.TryMakeMove(move.From, move.To, out string newFen))
-                {
-                    return Ok(newFen);
-                }
-                else
-                {
-                    return BadRequest("Move is invalid.");
-                }
+                boardHolder.SetBoard(boardFactory.InitializeNewBoard());
+                var fen = _boardParserService.BoardToFen(boardHolder.GetBoard());
+                return Ok(fen);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to validate move");
-                return StatusCode(500, "Internal Server Error");
+                _logger.LogError("Failed to generate FEN: {Exception}", ex);
+                return StatusCode(500, new { Message = "Internal Server Error. Please check the logs for more details." });
             }
         }
 
-
-
+        [HttpPost("move")]
+        public IActionResult MakeMove([FromBody] MoveRequest request)
+        {
+            var fromTile = ChessNotationConverter.ConvertToTile(request.From);
+            var toTile = ChessNotationConverter.ConvertToTile(request.To);
+            IBoard currentBoard = boardHolder.GetBoard();
+            var movement = _movementFactory.CreateMovement(fromTile, toTile, currentBoard);
+            var validMove = _validator.IsMovementValid(movement, currentBoard);
+            if (validMove)
+            {
+                IBoard newBoard = boardFactory.CreateNewBoard(currentBoard, movement);
+                boardHolder.SetBoard(newBoard);
+                string NewBoardFen = _boardParserService.BoardToFen(newBoard);
+                return Ok(new { Fen = NewBoardFen });
+            }
+            Piece? piece = currentBoard.GetPieceByTilePosition(movement.From);
+            return BadRequest(new { Message = $"Cant move ur {piece} from: {request.From} to: {request.To}" });
+        }
     }
 }
