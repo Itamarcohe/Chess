@@ -1,4 +1,5 @@
-﻿using Chess_Backend.Models.Pieces;
+﻿using Chess_Backend.Models.Enums;
+using Chess_Backend.Models.Pieces;
 using Chess_Backend.Models.Positions;
 namespace Chess_Backend.Models
 {
@@ -7,15 +8,6 @@ namespace Chess_Backend.Models
         public List<Piece> Pieces { get; private set; }
         public Dictionary<Tile, Piece> Positions { get; private set; }
         public Color CurrentTurnColor { get; private set; }
-
-        public Board()
-        {
-            Pieces = new List<Piece>();
-            Positions = new Dictionary<Tile, Piece>();
-            MapPiecesToDictionary();
-
-        }
-
         public Board(List<Piece> pieces, Color currentTurnColor)
         {
             this.Pieces = pieces;
@@ -23,7 +15,6 @@ namespace Chess_Backend.Models
             Positions = new Dictionary<Tile, Piece>();
             MapPiecesToDictionary();
         }
-
         private void MapPiecesToDictionary()
         {
             foreach (Piece piece in Pieces)
@@ -31,24 +22,13 @@ namespace Chess_Backend.Models
                 Positions[piece.TilePosition] = piece;
             }
         }
-
         public Piece? GetPieceByTilePosition(Tile tile)
         {
-            Positions.TryGetValue(tile, out Piece piece);
+            Positions.TryGetValue(tile, out Piece? piece);
             return piece;
         }
-        public Piece? GetPieceByTilePosition(int column, int row)
-        {
-            return GetPieceByTilePosition(new Tile(column, row));
-        }
-
-        public bool IsTileOccupied(Tile tile)
-        {
-            return Positions.ContainsKey(tile);
-        }
-        public bool IsTileOccupied(int column, int row)
-        {
-            return Positions.ContainsKey(new Tile(column, row));
-        }
+        public Piece? GetPieceByTilePosition(int column, int row) => GetPieceByTilePosition(new Tile(column, row));
+        public bool IsTileOccupied(Tile tile) => Positions.ContainsKey(tile);
+        public bool IsTileOccupied(int column, int row) => Positions.ContainsKey(new Tile(column, row));
     }
 }

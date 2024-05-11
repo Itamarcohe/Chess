@@ -1,4 +1,5 @@
-﻿using Chess_Backend.Models.Positions;
+﻿using Chess_Backend.Models.Enums;
+using Chess_Backend.Models.Positions;
 
 namespace Chess_Backend.Models.Pieces
 {

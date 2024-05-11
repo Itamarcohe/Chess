@@ -1,4 +1,5 @@
-﻿using Chess_Backend.Models.Movements;
+﻿using Chess_Backend.Models.Enums;
+using Chess_Backend.Models.Movements;
 using Chess_Backend.Models.Pieces;
 using Chess_Backend.Models.Positions;
 

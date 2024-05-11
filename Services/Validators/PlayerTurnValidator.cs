@@ -17,6 +17,5 @@ namespace Chess_Backend.Services.Validators
             }
             return false;
         }
-
     }
 }

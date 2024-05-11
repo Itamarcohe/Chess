@@ -1,4 +1,5 @@
-﻿using Chess_Backend.Models.Pieces;
+﻿using Chess_Backend.Models.Movements.MovementTypes;
+using Chess_Backend.Models.Pieces.SubPieces;
 using Chess_Backend.Models.Positions;
 
 namespace Chess_Backend.Models.Movements

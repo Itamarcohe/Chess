@@ -7,13 +7,11 @@ namespace Chess_Backend.Services.Validators
 {
     public class CompositeValidator : ICompositeValidator
     {
-        private List<IMovementValidator> _movementValidators;
-
-        public CompositeValidator(List<IMovementValidator> movementValidators)
+        private IEnumerable<IMovementValidator> _movementValidators;
+        public CompositeValidator(IEnumerable<IMovementValidator> movementValidators)
         {
             _movementValidators = movementValidators;
         }
-
         public bool IsMovementValid(Movement movement, IBoard currentBoard)
         {
             foreach (IMovementValidator validator in _movementValidators)
