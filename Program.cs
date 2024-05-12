@@ -1,4 +1,5 @@
 
+using Chess_Backend.Controllers;
 using Chess_Backend.Models.Movements;
 using Chess_Backend.Models.Pieces;
 using Chess_Backend.Services.BoardServices;
@@ -13,6 +14,7 @@ namespace Chess_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddSingleton<IChessManagerService, ChessManagerService>();
             builder.Services.AddSingleton<IBoardHolder, BoardHolder>();
             builder.Services.AddSingleton<MovementFactory>();
             builder.Services.AddSingleton<IPieceFactory, PieceFactory>();

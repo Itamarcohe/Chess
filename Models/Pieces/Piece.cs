@@ -14,10 +14,11 @@ namespace Chess_Backend.Models.Pieces
             this.TilePosition = otherpiece.TilePosition;
             this.HasMoved = otherpiece.HasMoved;
         }
-        protected Piece(Color color, Tile tilePosition)
+        protected Piece(Color color, Tile tilePosition, bool hasMoved = false)
         {
             Color = color;
             TilePosition = tilePosition;
+            HasMoved = hasMoved;
         }
         protected abstract char GetInternalSymbol();
         public char GetSymbol()

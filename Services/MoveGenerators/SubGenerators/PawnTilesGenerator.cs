@@ -9,8 +9,11 @@ namespace Chess_Backend.Services.MoveGenerators.SubGenerators
     public class PawnTilesGenerator : BaseTileGenerator
     {
 
-        private (int, int)[] WhitePawnMoves = new[] { (0, 1), (-1, 1), (1, 1) };
-        private (int, int)[] BlackPawnMoves = new[] { (0, -1), (-1, -1), (1, -1) };
+        private readonly (int, int)[] WhitePawnInitialMoves = new[] { (0, 2), (0, 1), (-1, 1), (1, 1) };
+        private readonly (int, int)[] BlackPawnInitialMoves = new[] { (0, -2), (0, -1), (-1, -1), (1, -1) };
+
+        private readonly (int, int)[] WhitePawnStandardMoves = new[] { (0, 1), (-1, 1), (1, 1) };
+        private readonly (int, int)[] BlackPawnStandardMoves = new[] { (0, -1), (-1, -1), (1, -1) };
         public override (int, int)[] MoveVectors => Array.Empty<(int, int)>();
 
         public override bool AppliesTo(Piece piece)
@@ -24,19 +27,11 @@ namespace Chess_Backend.Services.MoveGenerators.SubGenerators
             (int, int)[] moveVectors;
             if (piece.Color == Color.White)
             {
-                moveVectors = WhitePawnMoves;
-                //if (!piece.HasMoved)
-                //{
-                //    moveVectors[3] = (0, 2);
-                //}
+                moveVectors = piece.HasMoved ? WhitePawnStandardMoves : WhitePawnInitialMoves;
             }
             else
             {
-                moveVectors = BlackPawnMoves;
-                //if (!piece.HasMoved)
-                //{
-                //    moveVectors[3] = (0, -2);
-                //}
+                moveVectors = piece.HasMoved ? BlackPawnStandardMoves : BlackPawnInitialMoves;
             }
 
             foreach (var moveVector in moveVectors)

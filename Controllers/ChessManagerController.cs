@@ -1,9 +1,4 @@
-using Chess_Backend.Models;
 using Chess_Backend.Models.Movements;
-using Chess_Backend.Models.Pieces;
-using Chess_Backend.Services.BoardServices;
-using Chess_Backend.Services.Validators;
-using Chess_Backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chess_Backend.Controllers
@@ -12,27 +7,13 @@ namespace Chess_Backend.Controllers
     [Route("[controller]")]
     public class ChessManagerController : ControllerBase
     {
-        private readonly ILogger<ChessManagerController> _logger;
-        private readonly MovementFactory _movementFactory;
-        private readonly ICompositeValidator _validator;
-        private readonly IBoardParserService _boardParserService;
-        private readonly IBoardFactory boardFactory;
-        private readonly IBoardHolder boardHolder;
+        private readonly ILogger<ChessManagerController> logger;
+        private readonly IChessManagerService chessManagerService;
 
-        public ChessManagerController(ILogger<ChessManagerController> logger,
-            MovementFactory movementFactory,
-            IBoardParserService boardParserService,
-            ICompositeValidator compositeValidator,
-            IBoardFactory boardFactory,
-            IBoardHolder boardHolder
-            )
+        public ChessManagerController(ILogger<ChessManagerController> logger, IChessManagerService chessManagerService)
         {
-            _logger = logger;
-            _movementFactory = movementFactory;
-            _boardParserService = boardParserService;
-            _validator = compositeValidator;
-            this.boardFactory = boardFactory;
-            this.boardHolder = boardHolder;
+            this.logger = logger;
+            this.chessManagerService = chessManagerService;
         }
 
         [HttpGet("GetInitialFen")]
@@ -40,34 +21,27 @@ namespace Chess_Backend.Controllers
         {
             try
             {
-                boardHolder.SetBoard(boardFactory.InitializeNewBoard());
-                var fen = _boardParserService.BoardToFen(boardHolder.GetBoard());
+                var fen = chessManagerService.GetInitialFen();
                 return Ok(fen);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to generate FEN: {Exception}", ex);
-                return StatusCode(500, new { Message = "Internal Server Error. Please check the logs for more details." });
+                logger.LogError("Failed to generate FEN: {Exception}", ex);
+                return StatusCode(500, "Internal Server Error. Please check the logs for more details.");
             }
         }
 
         [HttpPost("move")]
-        public IActionResult MakeMove([FromBody] MoveRequest request)
+        public IActionResult ProcessMove([FromBody] MoveRequest request)
         {
-            var fromTile = ChessNotationConverter.ConvertToTile(request.From);
-            var toTile = ChessNotationConverter.ConvertToTile(request.To);
-            IBoard currentBoard = boardHolder.GetBoard();
-            var movement = _movementFactory.CreateMovement(fromTile, toTile, currentBoard);
-            var validMove = _validator.IsMovementValid(movement, currentBoard);
-            if (validMove)
+            var (success, fen, errorMessage) = chessManagerService.ProcessMove(request);
+            if (success)
             {
-                IBoard newBoard = boardFactory.CreateNewBoard(currentBoard, movement);
-                boardHolder.SetBoard(newBoard);
-                string NewBoardFen = _boardParserService.BoardToFen(newBoard);
-                return Ok(new { Fen = NewBoardFen });
+                return Ok(new { Fen = fen });
             }
-            Piece? piece = currentBoard.GetPieceByTilePosition(movement.From);
-            return BadRequest(new { Message = $"Cant move ur {piece} from: {request.From} to: {request.To}" });
+            return BadRequest(new { Message = errorMessage });
         }
     }
+
 }
+
