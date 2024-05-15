@@ -5,11 +5,11 @@ namespace Chess_Backend.Services.BoardServices
     public class BoardHolder : IBoardHolder
     {
         private IBoard? board;
-        public IBoard GetBoard()
+        public IBoard? GetBoard()
         {
             if (board == null)
             {
-                throw new Exception("The board has not been set. ");
+                throw new Exception("the board has not been set. ");
             }
             return board;
         }

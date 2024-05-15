@@ -1,5 +1,6 @@
 ﻿using Chess_Backend.Models.Enums;
 using Chess_Backend.Models.Pieces;
+using Chess_Backend.Models.Pieces.SubPieces;
 using Chess_Backend.Models.Positions;
 namespace Chess_Backend.Models
 {
@@ -27,8 +28,19 @@ namespace Chess_Backend.Models
             Positions.TryGetValue(tile, out Piece? piece);
             return piece;
         }
-        public Piece? GetPieceByTilePosition(int column, int row) => GetPieceByTilePosition(new Tile(column, row));
-        public bool IsTileOccupied(Tile tile) => Positions.ContainsKey(tile);
-        public bool IsTileOccupied(int column, int row) => Positions.ContainsKey(new Tile(column, row));
-    }
+        public Tile? FindKingPosition()
+        {
+            foreach (Piece piece in Pieces)
+            {
+                if (piece.GetType() == typeof(King) && piece.Color == CurrentTurnColor)
+                {
+                    return piece.TilePosition;
+                }
+            }
+            return null;
+        }
+    public Piece? GetPieceByTilePosition(int column, int row) => GetPieceByTilePosition(new Tile(column, row));
+    public bool IsTileOccupied(Tile tile) => Positions.ContainsKey(tile);
+    public bool IsTileOccupied(int column, int row) => Positions.ContainsKey(new Tile(column, row));
+}
 }

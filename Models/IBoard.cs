@@ -13,5 +13,6 @@ namespace Chess_Backend.Models
         Piece? GetPieceByTilePosition(int col, int row);
         Color CurrentTurnColor { get; }
         List<Piece> Pieces { get; }
+        Tile? FindKingPosition();
     }
 }
