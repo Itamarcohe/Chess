@@ -4,7 +4,7 @@ using Chess_Backend.Services.BoardServices;
 
 namespace Chess_Backend.Services.MoveGenerators.SubGenerators
 {
-    public class BishopTilesGenerator : BaseTileGenerator
+    public class BishopTilesGenerator : BaseSlidingTilesGenerator 
     {
         public override (int, int)[] MoveVectors { get; } = [(1, 1), (1, -1), (-1, 1), (-1, -1)];
         public BishopTilesGenerator(IBoardHolder boardHolder) : base(boardHolder) { }

@@ -28,6 +28,7 @@ namespace Chess_Backend
             builder.Services.AddSingleton<IMovementValidator, CaptureSameColorValidator>();
             builder.Services.AddSingleton<IMovementValidator, PlayerTurnValidator>();
             builder.Services.AddSingleton<IMovementValidator, MoveInPossibleMovesValidator>();
+            builder.Services.AddSingleton<IMovementValidator, CastlingValidator>();
             builder.Services.AddSingleton<ICompositeValidator, CompositeValidator>();
 
             // Register individual validators as singletons for the CompositeMoveGenerator
