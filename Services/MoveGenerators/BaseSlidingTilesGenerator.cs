@@ -1,38 +1,50 @@
 ﻿using Chess_Backend.Models;
 using Chess_Backend.Models.Pieces;
+using Chess_Backend.Models.Pieces.SubPieces;
 using Chess_Backend.Models.Positions;
 using Chess_Backend.Services.BoardServices;
 using Chess_Backend.Utils;
 
 namespace Chess_Backend.Services.MoveGenerators
 {
-    public abstract class BaseTileGenerator : IMoveToTilesGenerator
+    public abstract class BaseSlidingTilesGenerator : IMoveToTilesGenerator
     {
-        protected BaseTileGenerator(IBoardHolder boardHolder) { this.boardHolder = boardHolder; }
+        protected BaseSlidingTilesGenerator(IBoardHolder boardHolder) { this.boardHolder = boardHolder; }
         public abstract (int, int)[] MoveVectors { get; }
         public IBoardHolder boardHolder { get; }
 
         public IBoard? board;
         public abstract bool AppliesTo(Piece piece);
+
         public virtual List<Tile> GetPossibleMoves(Piece piece)
         {
             board = boardHolder.GetBoard();
             var moves = new List<Tile>();
             foreach (var (dx, dy) in MoveVectors)
             {
-                int newX = piece.TilePosition.Column + dx;
-                int newY = piece.TilePosition.Row + dy;
-                if (BoardUtils.IsWithinBoardBounds(newX, newY))
+                int newX = piece.TilePosition.Column;
+                int newY = piece.TilePosition.Row;
+                while (true)
                 {
+                    newX += dx;
+                    newY += dy;
+                    if (!BoardUtils.IsWithinBoardBounds(newX, newY))
+                    {
+                        break;
+                    }
                     Tile newTile = new Tile(newX, newY);
                     Piece? occupyingPiece = board.GetPieceByTilePosition(newTile);
                     if (occupyingPiece == null)
                     {
                         moves.Add(newTile);
                     }
-                    else if (occupyingPiece.Color != piece.Color)
+                    else
                     {
-                        moves.Add(newTile);
+                        if (occupyingPiece.Color != piece.Color)
+                        {
+                            moves.Add(newTile);
+                        }
+                        break;
                     }
                 }
             }

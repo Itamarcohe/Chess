@@ -5,12 +5,8 @@ namespace Chess_Backend.Models.Pieces.SubPieces
 {
     public class King : Piece
     {
-        public King(Color color, Tile tilePosition) : base(color, tilePosition) { }
-
-        public King(King otherpiece) : base(otherpiece)
-        {
-        }
-
+        public King(Color color, Tile tilePosition, bool hasMoved = false) : base(color, tilePosition, hasMoved) { }
+        public King(King otherpiece) : base(otherpiece) { }
         protected override char GetInternalSymbol() => 'k';
     }
 }

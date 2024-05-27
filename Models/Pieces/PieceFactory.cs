@@ -9,11 +9,11 @@ namespace Chess_Backend.Models.Pieces
         private static readonly Dictionary<char, Func<Color, Tile, Piece>> pieceCreators = new Dictionary<char, Func<Color, Tile, Piece>>
     {
         { 'p', (color, tile) => new Pawn(color, tile, true) },
-        { 'r', (color, tile) => new Rook(color, tile) },
+        { 'r', (color, tile) => new Rook(color, tile, true) },
         { 'n', (color, tile) => new Knight(color, tile) },
         { 'b', (color, tile) => new Bishop(color, tile) },
         { 'q', (color, tile) => new Queen(color, tile) },
-        { 'k', (color, tile) => new King(color, tile) }
+        { 'k', (color, tile) => new King(color, tile, true) }
     };
         public Piece CreatePiece(char symbol, Tile tile)
         {

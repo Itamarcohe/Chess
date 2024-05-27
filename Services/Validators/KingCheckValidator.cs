@@ -17,6 +17,12 @@ namespace Chess_Backend.Services.Validators
             MovesGenerator = movesGenerator;
         }
         public bool ShouldValidateMove(Movement movement)
+
+            // If it was CastlingValidator
+            // Doing some check to verify if I need to check for castling 
+            // So ill check if The king didn't moved yet at all till now
+
+
         {
             return true;
         }
