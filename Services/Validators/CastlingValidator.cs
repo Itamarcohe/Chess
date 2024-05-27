@@ -29,7 +29,6 @@ namespace Chess_Backend.Services.Validators
 
         private bool ValidateQueenCastle(QueenCastlingMovement movement, IBoard board)
         {
-            // if its queen side so Rook is at - //  0
             if (movement.KingToMove.HasMoved) 
             {
                 return false;
@@ -39,7 +38,10 @@ namespace Chess_Backend.Services.Validators
             {
                 return false;
             }
-            (int, int)[] InBetweenSquares = GetSquaresToCheck(movement);
+
+            var kingRow = movement.KingToMove.TilePosition.Row;
+            (int, int)[] InBetweenSquares = [(1, kingRow), (2, kingRow), (3, kingRow)];
+
             if (!IsSquaresBetweenEmpty(InBetweenSquares, board))
             {
                 return false;
@@ -58,41 +60,13 @@ namespace Chess_Backend.Services.Validators
             {
                 return false;
             }
-            (int, int)[] InBetweenSquares = GetSquaresToCheck(movement);
+            var kingRow = movement.KingToMove.TilePosition.Row;
+            (int, int)[] InBetweenSquares = [(5, kingRow), (6, kingRow)];
             if (!IsSquaresBetweenEmpty(InBetweenSquares, board))
             {
                 return false;
             }
-            // implement moving logic ? 
             return true;
-        }
-        private (int, int)[] GetSquaresToCheck(Movement movement)
-        {
-            (int, int)[]? squares = null;
-
-            if (movement is CastlingBaseMovement castlingMovement)
-            {
-                int kingRow = castlingMovement.KingToMove.TilePosition.Row;
-                int kingColumn = castlingMovement.KingToMove.TilePosition.Column;
-
-                if (movement is KingCastlingMovement)
-                {
-                    squares = new (int, int)[2];
-                    for (int i = 0; i < 2; i++)
-                    {
-                        squares[i] = (kingColumn + i + 1, kingRow);
-                    }
-                }
-                else if (movement is QueenCastlingMovement)
-                {
-                    squares = new (int, int)[3];
-                    for (int i = 0; i < 3; i++)
-                    {
-                        squares[i] = (kingColumn - (i + 1), kingRow);
-                    }
-                }
-            }
-            return squares!;
         }
         private bool IsSquaresBetweenEmpty((int, int)[] Squares, IBoard board)
         {
