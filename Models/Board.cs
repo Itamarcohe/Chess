@@ -28,11 +28,11 @@ namespace Chess_Backend.Models
             Positions.TryGetValue(tile, out Piece? piece);
             return piece;
         }
-        public Tile? FindKingPosition()
+        public Tile? FindOpponentKingPosition()
         {
-            foreach (Piece piece in Pieces)
+            foreach (Piece piece in Pieces.Where(p => p.Color != CurrentTurnColor))
             {
-                if (piece.GetType() == typeof(King) && piece.Color == CurrentTurnColor)
+                if (piece.GetType() == typeof(King))
                 {
                     return piece.TilePosition;
                 }

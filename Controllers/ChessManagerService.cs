@@ -45,7 +45,6 @@ public class ChessManagerService : IChessManagerService
             IBoard currentBoard = _boardHolder.GetBoard();
             var movement = _movementFactory.CreateMovement(fromTile, toTile, currentBoard);
             var validMove = _validator.IsMovementValid(movement, currentBoard);
-
             if (validMove)
             {
                 IBoard newBoard = _boardFactory.CreateNewBoard(currentBoard, movement);
