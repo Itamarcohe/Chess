@@ -5,6 +5,7 @@ using Chess_Backend.Models;
 using Chess_Backend.Services.BoardServices;
 using Chess_Backend.Services.Validators;
 using Chess_Backend.Utils;
+using Chess_Backend.Services.MoveComposite;
 
 public class ChessManagerService : IChessManagerService
 {
@@ -14,13 +15,16 @@ public class ChessManagerService : IChessManagerService
     private readonly IBoardParserService _boardParserService;
     private readonly IBoardFactory _boardFactory;
     private readonly IBoardHolder _boardHolder;
+    private readonly ICompositeMoveLogic _compositeMoveLogic;
 
     public ChessManagerService(ILogger<ChessManagerService> logger,
         MovementFactory movementFactory,
         IBoardParserService boardParserService,
         ICompositeValidator compositeValidator,
         IBoardFactory boardFactory,
-        IBoardHolder boardHolder)
+        IBoardHolder boardHolder,
+        ICompositeMoveLogic compositeMoveLogic
+        )
     {
         _logger = logger;
         _movementFactory = movementFactory;
@@ -28,6 +32,7 @@ public class ChessManagerService : IChessManagerService
         _validator = compositeValidator;
         _boardFactory = boardFactory;
         _boardHolder = boardHolder;
+        _compositeMoveLogic = compositeMoveLogic;
     }
 
     public string GetInitialFen()
@@ -47,7 +52,10 @@ public class ChessManagerService : IChessManagerService
             var validMove = _validator.IsMovementValid(movement, currentBoard);
             if (validMove)
             {
-                IBoard newBoard = _boardFactory.CreateNewBoard(currentBoard, movement);
+
+                //IBoard newBoard = _boardFactory.CreateNewBoard(currentBoard, movement);
+                IBoard newBoard = _compositeMoveLogic.ApplyMove(movement, currentBoard)!;
+
                 _boardHolder.SetBoard(newBoard);
                 return (true, _boardParserService.BoardToFen(newBoard), null);
             }

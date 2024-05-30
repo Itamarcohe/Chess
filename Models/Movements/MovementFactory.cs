@@ -39,7 +39,7 @@ namespace Chess_Backend.Models.Movements
                 {
                     return new KingCastlingMovement(from, to, (King)gamePiece);
                 }
-                if ((from.Column - to.Column) == 2)
+                if ((from.Column - to.Column) == 2) 
                 {
                     return new QueenCastlingMovement(from, to, (King)gamePiece);
                 }

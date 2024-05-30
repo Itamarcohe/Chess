@@ -3,6 +3,7 @@ using Chess_Backend.Controllers;
 using Chess_Backend.Models.Movements;
 using Chess_Backend.Models.Pieces;
 using Chess_Backend.Services.BoardServices;
+using Chess_Backend.Services.MoveComposite;
 using Chess_Backend.Services.MoveGenerators;
 using Chess_Backend.Services.MoveGenerators.SubGenerators;
 using Chess_Backend.Services.Validators;
@@ -39,6 +40,11 @@ namespace Chess_Backend
             builder.Services.AddSingleton<IMoveToTilesGenerator, KingTilesGenerator>();
             builder.Services.AddSingleton<IMoveToTilesGenerator, QueenTilesGenerator>();
             builder.Services.AddSingleton<ICompositeTileGenerator, CompositeMovesGenerator>();
+
+            //  Register individual movers as singletons for the MoveLogicComposite
+            builder.Services.AddSingleton<IMoveLogic, NormalMoveLogic>();
+            builder.Services.AddSingleton<IMoveLogic, AttackMoveLogic>();
+            builder.Services.AddSingleton<ICompositeMoveLogic, CompositeMoveLogic>();
 
             builder.Services.AddCors(options =>
             {
