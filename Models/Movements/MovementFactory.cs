@@ -7,8 +7,8 @@ namespace Chess_Backend.Models.Movements
     public class MovementFactory
     {
         public MovementFactory() { }
- 
-        public Movement CreateMovement(Tile from, Tile to, IBoard _board)
+
+        public Movement CreateMovement(Tile from, Tile to, IBoard _board, char? promotion = null)
         {
 
             var gamePiece = _board.GetPieceByTilePosition(from);
@@ -25,11 +25,9 @@ namespace Chess_Backend.Models.Movements
                 return new AttackMovement(from, to);
             }
 
-            // checking for Pawn Promotion
-            if (gamePiece is Pawn && (to.Row == 7 || to.Row == 0))
+            if (promotion != null && gamePiece is Pawn && (to.Row == 7 || to.Row == 0))
             {
-                // default promoting to queen for now
-               return new PawnPromotionMovement(from, to, 'q');
+                return new PawnPromotionMovement(from, to, promotion.Value);
             }
 
             // Castling 

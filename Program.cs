@@ -44,6 +44,9 @@ namespace Chess_Backend
             //  Register individual movers as singletons for the MoveLogicComposite
             builder.Services.AddSingleton<IMoveLogic, NormalMoveLogic>();
             builder.Services.AddSingleton<IMoveLogic, AttackMoveLogic>();
+            builder.Services.AddSingleton<IMoveLogic, PawnPromotionMoveLogic>();
+            builder.Services.AddSingleton<IMoveLogic, QueenCastlingMoveLogic>();
+            builder.Services.AddSingleton<IMoveLogic, KingCastlingMoveLogic>();
             builder.Services.AddSingleton<ICompositeMoveLogic, CompositeMoveLogic>();
 
             builder.Services.AddCors(options =>
