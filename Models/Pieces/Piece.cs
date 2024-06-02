@@ -20,10 +20,10 @@ namespace Chess_Backend.Models.Pieces
             TilePosition = tilePosition;
             HasMoved = hasMoved;
         }
-        protected abstract char GetInternalSymbol();
+        protected abstract char GetSymbolInternal();
         public char GetSymbol()
         {
-            var symbol = GetInternalSymbol();
+            var symbol = GetSymbolInternal();
             return Color.Equals(Color.White) ? Char.ToUpper(symbol) : Char.ToLower(symbol);
         }
         public override string ToString()

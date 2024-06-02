@@ -6,10 +6,7 @@ namespace Chess_Backend.Models.Pieces.SubPieces
     public class Bishop : Piece
     {
         public Bishop(Color color, Tile tilePosition) : base(color, tilePosition) { }
-        public Bishop(Bishop otherpiece) : base(otherpiece)
-        {
-        }
-
-        protected override char GetInternalSymbol() => 'b'; // lowercase 'b' for bishop
+        public Bishop(Bishop otherpiece) : base(otherpiece) { }
+        protected override char GetSymbolInternal() => 'b'; 
     }
 }

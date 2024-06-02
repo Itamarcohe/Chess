@@ -7,7 +7,6 @@ namespace Chess_Backend.Services.MoveGenerators.SubGenerators
     public class BishopTilesGenerator : BaseSlidingTilesGenerator 
     {
         public override (int, int)[] MoveVectors { get; } = [(1, 1), (1, -1), (-1, 1), (-1, -1)];
-        public BishopTilesGenerator(IBoardHolder boardHolder) : base(boardHolder) { }
         public override bool AppliesTo(Piece piece) => piece is Bishop;
     }
 }

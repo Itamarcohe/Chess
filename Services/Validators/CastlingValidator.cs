@@ -24,7 +24,9 @@ namespace Chess_Backend.Services.Validators
             {
                 return ValidateQueenCastle((QueenCastlingMovement)movement, board);
             }
-            return false;
+
+            // check wheter throw execption or just return true shouldnt reach here anyway
+            throw new NotImplementedException();
         }
 
         private bool ValidateQueenCastle(QueenCastlingMovement movement, IBoard board)
@@ -33,8 +35,9 @@ namespace Chess_Backend.Services.Validators
             {
                 return false;
             }
+
             Piece? piece = board.GetPieceByTilePosition(movement.KingToMove.TilePosition.Column - 4, movement.KingToMove.TilePosition.Row);
-            if (piece == null || piece is not Rook || piece.HasMoved)
+            if (piece == null || piece is not Rook || piece.HasMoved || piece.Color != movement.KingToMove.Color)
             {
                 return false;
             }

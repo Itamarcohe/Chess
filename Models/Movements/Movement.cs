@@ -6,7 +6,6 @@ namespace Chess_Backend.Models.Movements
         {
             public Tile From { get; private set; }
             public Tile To { get; private set; }
-
             protected Movement(Tile from, Tile to)
             {
                 From = from;

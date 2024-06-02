@@ -5,48 +5,36 @@ using System.ComponentModel.DataAnnotations;
 using Chess_Backend.Models.Positions;
 using Chess_Backend.Models.Pieces;
 using Chess_Backend.Services.MoveGenerators;
+using Chess_Backend.Utils;
+using Chess_Backend.Services.BoardServices;
+using Chess_Backend.Services.MoveComposite;
 
 namespace Chess_Backend.Services.Validators
 {
     public class KingCheckValidator : IMovementValidator
     {
-        public ICompositeTileGenerator MovesGenerator { get; }
+        private readonly ICompositeTileGenerator _movesGenerator;
+        private readonly ICompositeMoveLogic _compositeMoveLogic;
 
-        public KingCheckValidator(ICompositeTileGenerator movesGenerator)
+        public KingCheckValidator(ICompositeTileGenerator movesGenerator, ICompositeMoveLogic compositeMoveLogic)
         {
-            MovesGenerator = movesGenerator;
+            _movesGenerator = movesGenerator;
+            _compositeMoveLogic = compositeMoveLogic;
         }
-        public bool ShouldValidateMove(Movement movement)
-
-            // If it was CastlingValidator
-            // Doing some check to verify if I need to check for castling 
-            // So ill check if The king didn't moved yet at all till now
-
-
-        {
-            return true;
-        }
+        public bool ShouldValidateMove(Movement movement) => true;
         public bool IsMovementValid(Movement movement, IBoard currentBoard)
         {
-            //var kingPosition = currentBoard.FindKingPosition();
-            //var otherPlayerColor = currentBoard.CurrentTurnColor == Color.White ? Color.Black : Color.White;
-            //var checkList = new List<Tile>();
-            //foreach (Piece piece in currentBoard.Pieces.Where(p => p.Color == otherPlayerColor))
-            //{
-            //    var possibleMoves = MovesGenerator.GetPossibleMoves(piece);
-            //    foreach (Tile tile in possibleMoves)
-            //                // my king Tile:
-            //        if (tile == kingPosition)
-            //        {
-            //            checkList.Add(tile);
-
-            //            // or just return true when one found
-            //        }
-            //    }
-            //}
+            IBoard newSimulatedBoard = _compositeMoveLogic.ApplyMove(movement, currentBoard)!;  // Making the move + Changing the turn
+            var currentPlayerKingPosition = newSimulatedBoard.FindOpponentKingPosition(); // getting the current moving player king tile from the new board 
+            foreach (Piece piece in newSimulatedBoard.Pieces.Where(p => p.Color == newSimulatedBoard.CurrentTurnColor)) 
+            {
+                var possibleMoves = _movesGenerator.GetPossibleMoves(piece, newSimulatedBoard);
+                if (possibleMoves.Any(tile => tile.Equals(currentPlayerKingPosition)))
+                {
+                    return false;
+                }
+            }
             return true;
         }
-
-
     }
 }

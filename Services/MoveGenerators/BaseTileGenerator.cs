@@ -8,15 +8,10 @@ namespace Chess_Backend.Services.MoveGenerators
 {
     public abstract class BaseTileGenerator : IMoveToTilesGenerator
     {
-        protected BaseTileGenerator(IBoardHolder boardHolder) { this.boardHolder = boardHolder; }
         public abstract (int, int)[] MoveVectors { get; }
-        public IBoardHolder boardHolder { get; }
-
-        public IBoard? board;
         public abstract bool AppliesTo(Piece piece);
-        public virtual List<Tile> GetPossibleMoves(Piece piece)
+        public virtual List<Tile> GetPossibleMoves(Piece piece, IBoard board)
         {
-            board = boardHolder.GetBoard();
             var moves = new List<Tile>();
             foreach (var (dx, dy) in MoveVectors)
             {
