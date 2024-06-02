@@ -25,10 +25,10 @@ namespace Chess_Backend.Services.MoveComposite
 
         public IBoard CreateNewBoard(IBoard board, Movement movement)
         {
-            var newTurnColor = board.CurrentTurnColor == Color.White ? Color.Black : Color.White;
             var newPieces = board.Pieces
                                  .Select(piece => TransformPieceForNewBoard(piece, movement))
                                  .ToList();
+            var newTurnColor = board.CurrentTurnColor == Color.White ? Color.Black : Color.White;
             return new Board(newPieces, newTurnColor);
         }
         private Piece TransformPieceForNewBoard(Piece piece, Movement movement)

@@ -7,6 +7,6 @@ namespace Chess_Backend.Services.MoveGenerators
     public interface IMoveToTilesGenerator
     {
         bool AppliesTo(Piece piece);
-        List<Tile> GetPossibleMoves(Piece piece);
+        List<Tile> GetPossibleMoves(Piece piece, IBoard board);
     }
 }

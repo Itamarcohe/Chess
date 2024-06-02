@@ -14,12 +14,10 @@ namespace Chess_Backend.Models.Validation
             {
                 return ValidationResult.Success;
             }
-
             if (value is char piece && _validPieces.Contains(piece))
             {
                 return ValidationResult.Success;
             }
-
             return new ValidationResult("Promotion piece is not valid. Valid pieces are: 'q', 'r', 'b', 'n'.");
         }
     }

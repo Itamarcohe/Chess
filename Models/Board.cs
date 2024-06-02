@@ -16,6 +16,9 @@ namespace Chess_Backend.Models
             Positions = new Dictionary<Tile, Piece>();
             MapPiecesToDictionary();
         }
+        public Piece? GetPieceByTilePosition(int column, int row) => GetPieceByTilePosition(new Tile(column, row));
+        public bool IsTileOccupied(Tile tile) => Positions.ContainsKey(tile);
+        public bool IsTileOccupied(int column, int row) => Positions.ContainsKey(new Tile(column, row));
         private void MapPiecesToDictionary()
         {
             foreach (Piece piece in Pieces)
@@ -39,8 +42,5 @@ namespace Chess_Backend.Models
             }
             return null;
         }
-    public Piece? GetPieceByTilePosition(int column, int row) => GetPieceByTilePosition(new Tile(column, row));
-    public bool IsTileOccupied(Tile tile) => Positions.ContainsKey(tile);
-    public bool IsTileOccupied(int column, int row) => Positions.ContainsKey(new Tile(column, row));
 }
 }

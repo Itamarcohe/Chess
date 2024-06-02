@@ -10,19 +10,15 @@ namespace Chess_Backend.Services.MoveGenerators.SubGenerators
 {
     public class PawnTilesGenerator : BaseTileGenerator
     {
-
-
         private readonly (int, int)[] WhitePawnInitialMoves = new[] { (0, 1), (-1, 1), (1, 1), (0, 2) };
         private readonly (int, int)[] BlackPawnInitialMoves = new[] { (0, -1), (-1, -1), (1, -1), (0, -2) };
 
         private readonly (int, int)[] WhitePawnStandardMoves = new[] { (0, 1), (-1, 1), (1, 1) };
         private readonly (int, int)[] BlackPawnStandardMoves = new[] { (0, -1), (-1, -1), (1, -1) };
         public override (int, int)[] MoveVectors => Array.Empty<(int, int)>();
-        public PawnTilesGenerator(IBoardHolder boardHolder) : base(boardHolder) { }
         public override bool AppliesTo(Piece piece) => piece is Pawn;
-        public override List<Tile> GetPossibleMoves(Piece piece)
+        public override List<Tile> GetPossibleMoves(Piece piece, IBoard board)
         {
-            IBoard board = boardHolder.GetBoard();
             var moves = new List<Tile>();
 
             (int, int)[] moveVectors = piece.Color == Color.White

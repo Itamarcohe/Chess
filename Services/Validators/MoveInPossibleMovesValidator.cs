@@ -20,7 +20,7 @@ namespace Chess_Backend.Services.Validators
         public bool IsMovementValid(Movement movement, IBoard board)
         {
             var piece = board.GetPieceByTilePosition(movement.From) ?? throw new Exception("No Piece found in the move from position");
-            List<Tile> tiles = compositeMovesGenerator.GetPossibleMoves(piece);
+            List<Tile> tiles = compositeMovesGenerator.GetPossibleMoves(piece, board);
             return tiles.Contains(movement.To);
         }
     }

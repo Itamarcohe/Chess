@@ -9,16 +9,15 @@ namespace Chess_Backend.Services.MoveGenerators.SubGenerators
 {
     public class KingTilesGenerator : BaseTileGenerator
     {
-        public KingTilesGenerator(IBoardHolder boardHolder) : base(boardHolder) { }
         public override (int, int)[] MoveVectors { get; } =
             [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1), (2, 0), (-2, 0)
 ];
 
         public override bool AppliesTo(Piece piece) => piece is King;
 
-        public override List<Tile> GetPossibleMoves(Piece piece)
+        public override List<Tile> GetPossibleMoves(Piece piece, IBoard board)
         {
-            var moves = base.GetPossibleMoves(piece);
+            var moves = base.GetPossibleMoves(piece, board);
 
             if (piece.HasMoved)
             {

@@ -34,17 +34,17 @@ namespace Chess_Backend.Services.MoveComposite
             return new Board(newPieces, newTurnColor);
 
         }
+
         private Piece TransformPieceForNewBoard(Piece piece, Movement movement, IBoard board)
         {
             if (piece.TilePosition.Equals(movement.From))
             {
-                var promotionPieceSymbol = ((PawnPromotionMovement)movement).PromotionPieceSymbol;
-                return pieceFactory.CreatePieceColor(promotionPieceSymbol, movement.To, piece.Color);
+                return pieceFactory.CreatePieceColor(piece.GetSymbol(), movement.To, piece.Color);
             }
 
             if (IsRookOnRightOfKing(piece, movement))
             {
-                var newTile = new Tile(piece.TilePosition.Row, piece.TilePosition.Column - 2);
+                var newTile = new Tile(piece.TilePosition.Column - 2, piece.TilePosition.Row);
                 return pieceFactory.CreatePieceColor(piece.GetSymbol(), newTile, piece.Color);
             }
 
@@ -57,7 +57,5 @@ namespace Chess_Backend.Services.MoveComposite
                    piece.TilePosition.Row == movement.From.Row &&
                    piece.TilePosition.Column > movement.From.Column;
         }
-
-
     }
 }

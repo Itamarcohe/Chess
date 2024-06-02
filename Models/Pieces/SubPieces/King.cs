@@ -7,6 +7,6 @@ namespace Chess_Backend.Models.Pieces.SubPieces
     {
         public King(Color color, Tile tilePosition, bool hasMoved = false) : base(color, tilePosition, hasMoved) { }
         public King(King otherpiece) : base(otherpiece) { }
-        protected override char GetInternalSymbol() => 'k';
+        protected override char GetSymbolInternal() => 'k';
     }
 }

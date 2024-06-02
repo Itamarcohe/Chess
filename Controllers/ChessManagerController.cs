@@ -9,13 +9,11 @@ namespace Chess_Backend.Controllers
     {
         private readonly ILogger<ChessManagerController> logger;
         private readonly IChessManagerService chessManagerService;
-
         public ChessManagerController(ILogger<ChessManagerController> logger, IChessManagerService chessManagerService)
         {
             this.logger = logger;
             this.chessManagerService = chessManagerService;
         }
-
         [HttpGet("GetInitialFen")]
         public IActionResult GetInitialFen()
         {
@@ -30,7 +28,6 @@ namespace Chess_Backend.Controllers
                 return StatusCode(500, "Internal Server Error. Please check the logs for more details.");
             }
         }
-
         [HttpPost("move")]
         public IActionResult ProcessMove([FromBody] MoveRequest request)
         {
@@ -42,6 +39,5 @@ namespace Chess_Backend.Controllers
             return BadRequest(new { Message = errorMessage });
         }
     }
-
 }
 

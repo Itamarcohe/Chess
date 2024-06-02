@@ -7,7 +7,6 @@ namespace Chess_Backend.Services.MoveGenerators.SubGenerators
     public class RookTilesGenerator : BaseSlidingTilesGenerator
     {
         public override (int, int)[] MoveVectors { get; } =  [(1, 0), (-1, 0), (0, 1), (0, -1)];
-        public RookTilesGenerator(IBoardHolder boardHolder) : base(boardHolder) { }
         public override bool AppliesTo(Piece piece) => piece is Rook;
     }
 }

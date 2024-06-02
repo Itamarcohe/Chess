@@ -11,7 +11,6 @@ namespace Chess_Backend.Models.Positions
             Column = column;
             Row = row;
         }
-
         public override bool Equals(object? obj)
         {
             if (obj == null || obj.GetType() != GetType())
@@ -21,8 +20,6 @@ namespace Chess_Backend.Models.Positions
             Tile other = (Tile)obj;
             return Row == other.Row && Column == other.Column;
         }
-
-
         public override int GetHashCode()
         {
             unchecked
@@ -33,13 +30,9 @@ namespace Chess_Backend.Models.Positions
                 return hash;
             }
         }
-
         public override string ToString()
         {
             return $"({Column},{Row})";
         }
-
-
     }
-
 }

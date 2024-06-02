@@ -16,7 +16,6 @@ public class ChessManagerService : IChessManagerService
     private readonly IBoardFactory _boardFactory;
     private readonly IBoardHolder _boardHolder;
     private readonly ICompositeMoveLogic _compositeMoveLogic;
-
     public ChessManagerService(ILogger<ChessManagerService> logger,
         MovementFactory movementFactory,
         IBoardParserService boardParserService,
@@ -34,13 +33,11 @@ public class ChessManagerService : IChessManagerService
         _boardHolder = boardHolder;
         _compositeMoveLogic = compositeMoveLogic;
     }
-
     public string GetInitialFen()
     {
         _boardHolder.SetBoard(_boardFactory.InitializeNewBoard());
         return _boardParserService.BoardToFen(_boardHolder.GetBoard());
     }
-
     public (bool success, string? fen, string? errorMessage) ProcessMove(MoveRequest request)
     {
         try
@@ -53,7 +50,6 @@ public class ChessManagerService : IChessManagerService
             var validMove = _validator.IsMovementValid(movement, currentBoard);
             if (validMove)
             {
-
                 IBoard newBoard = _compositeMoveLogic.ApplyMove(movement, currentBoard)!;
                 _boardHolder.SetBoard(newBoard);
                 return (true, _boardParserService.BoardToFen(newBoard), null);

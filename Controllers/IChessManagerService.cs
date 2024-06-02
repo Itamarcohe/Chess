@@ -6,6 +6,5 @@ namespace Chess_Backend.Controllers
     {
         string GetInitialFen();
         (bool success, string? fen, string? errorMessage) ProcessMove(MoveRequest request);
-
     }
 }
