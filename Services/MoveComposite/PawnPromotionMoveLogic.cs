@@ -3,33 +3,19 @@ using Chess_Backend.Models.Enums;
 using Chess_Backend.Models.Movements;
 using Chess_Backend.Models.Movements.MovementTypes;
 using Chess_Backend.Models.Pieces;
+using Chess_Backend.Models.Positions;
 
 namespace Chess_Backend.Services.MoveComposite
 {
-    public class PawnPromotionMoveLogic : IMoveLogic
+    public class PawnPromotionMoveLogic : BaseMoveLogic
     {
-        private readonly IPieceFactory pieceFactory;
-        public PawnPromotionMoveLogic(IPieceFactory pieceFactory)
+        public PawnPromotionMoveLogic(IPieceFactory pieceFactory) : base(pieceFactory) { }
+        public override bool ShouldApplyMove(Movement movement) => movement is PawnPromotionMovement;
+        protected override IBoard CreateNewBoard(IBoard board, Movement movement, params Tile[] excludeTiles)
         {
-            this.pieceFactory = pieceFactory;
+            return base.CreateNewBoard(board, movement, movement.To);
         }
-        public bool ShouldApplyMove(Movement movement)
-        {
-            return movement is PawnPromotionMovement;
-        }
-        public IBoard ApplyMove(Movement movement, IBoard board)
-        {
-            return CreateNewBoard(board, movement);
-        }
-        public IBoard CreateNewBoard(IBoard board, Movement movement)
-        {
-            var newPieces = board.Pieces
-                                 .Select(piece => TransformPieceForNewBoard(piece, movement, board))
-                                 .ToList();
-            var newTurnColor = board.CurrentTurnColor == Color.White ? Color.Black : Color.White;
-            return new Board(newPieces, newTurnColor);
-        }
-        private Piece TransformPieceForNewBoard(Piece piece, Movement movement, IBoard board)
+        protected override Piece TransformPieceForNewBoard(Piece piece, Movement movement, IBoard board)
         {
             if (piece.TilePosition.Equals(movement.From))
             {

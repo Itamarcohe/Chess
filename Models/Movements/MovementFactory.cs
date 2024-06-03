@@ -9,13 +9,9 @@ namespace Chess_Backend.Models.Movements
         public MovementFactory() { }
         public Movement CreateMovement(Tile from, Tile to, IBoard _board, char? promotion = null)
         {
-            var gamePiece = _board.GetPieceByTilePosition(from);
-            if (gamePiece == null)
-            {
-                throw new InvalidOperationException("No piece at the starting position.");
-            }
+            var gamePiece = _board.GetPieceByTilePosition(from) ?? throw new InvalidOperationException("No piece at the starting position.");
             var targetPiece = _board.GetPieceByTilePosition(to);
-            if (targetPiece != null && targetPiece!.Color != gamePiece!.Color)
+            if (targetPiece != null && targetPiece!.Color != gamePiece!.Color && promotion == null)
             {
                 return new AttackMovement(from, to);
             }

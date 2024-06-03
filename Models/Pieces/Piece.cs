@@ -7,18 +7,23 @@ namespace Chess_Backend.Models.Pieces
     {
         public Color Color { get; private set; }
         public Tile TilePosition { get; private set; }
-        public bool HasMoved { get; private set; }
+        public bool HasMoved { get; set; }
         protected Piece(Piece otherpiece)
         {
             this.Color = otherpiece.Color;
             this.TilePosition = otherpiece.TilePosition;
             this.HasMoved = otherpiece.HasMoved;
         }
-        protected Piece(Color color, Tile tilePosition, bool hasMoved = false)
+        protected Piece(Color color, Tile tilePosition)
         {
             Color = color;
             TilePosition = tilePosition;
-            HasMoved = hasMoved;
+        }
+        protected Piece(Piece piece, Tile tilePosition)
+        {
+            Color = piece.Color;
+            TilePosition = tilePosition;
+            HasMoved = true;
         }
         protected abstract char GetSymbolInternal();
         public char GetSymbol()

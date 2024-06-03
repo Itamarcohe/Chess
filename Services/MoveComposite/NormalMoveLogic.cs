@@ -6,40 +6,17 @@ using Chess_Backend.Models.Pieces;
 
 namespace Chess_Backend.Services.MoveComposite
 {
-    public class NormalMoveLogic : IMoveLogic
+    public class NormalMoveLogic : BaseMoveLogic
     {
-        private readonly IPieceFactory pieceFactory;
-
-        public NormalMoveLogic(IPieceFactory pieceFactory)
-        {
-            this.pieceFactory = pieceFactory;
-        }
-        public bool ShouldApplyMove(Movement movement)
-        {
-            return movement is NormalMovement;
-        }
-        public IBoard ApplyMove(Movement movement, IBoard board)
-        {
-            return CreateNewBoard(board, movement);
-        }
-
-        public IBoard CreateNewBoard(IBoard board, Movement movement)
-        {
-            var newPieces = board.Pieces
-                                 .Select(piece => TransformPieceForNewBoard(piece, movement))
-                                 .ToList();
-            var newTurnColor = board.CurrentTurnColor == Color.White ? Color.Black : Color.White;
-            return new Board(newPieces, newTurnColor);
-        }
-        private Piece TransformPieceForNewBoard(Piece piece, Movement movement)
+        public NormalMoveLogic(IPieceFactory pieceFactory) : base(pieceFactory) { }
+        public override bool ShouldApplyMove(Movement movement) => movement is NormalMovement;
+        protected override Piece TransformPieceForNewBoard(Piece piece, Movement movement, IBoard board)
         {
             if (piece.TilePosition.Equals(movement.From))
             {
-                return pieceFactory.CreatePieceColor(piece.GetSymbol(), movement.To, piece.Color);
+                return pieceFactory.CreateMovedPiece(piece, movement.To);
             }
             return pieceFactory.CreatePiece(piece);
         }
-
-
     }
 }

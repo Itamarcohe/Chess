@@ -6,34 +6,28 @@ namespace Chess_Backend.Models.Pieces
 {
     public class PieceFactory : IPieceFactory
     {
-        private static readonly Dictionary<char, Func<Color, Tile, Piece>> pieceCreators = new Dictionary<char, Func<Color, Tile, Piece>>
-    {
-        { 'p', (color, tile) => new Pawn(color, tile, true) },
-        { 'r', (color, tile) => new Rook(color, tile, true) },
-        { 'n', (color, tile) => new Knight(color, tile) },
-        { 'b', (color, tile) => new Bishop(color, tile) },
-        { 'q', (color, tile) => new Queen(color, tile) },
-        { 'k', (color, tile) => new King(color, tile, true) }
-    };
-        public Piece CreatePiece(char symbol, Tile tile)
+        private static readonly Dictionary<char, Func<Color, Tile, Piece>> promotionDictonary = new Dictionary<char, Func<Color, Tile, Piece>>
         {
-            Color color = char.IsUpper(symbol) ? Color.White : Color.Black;
-            return CreatePieceColor(symbol, tile, color);
+            { 'r', ( color, tile ) => new Rook(color, tile) },
+            { 'n', ( color, tile ) => new Knight(color, tile) },
+            { 'b', ( color, tile) => new Bishop(color, tile) },
+            { 'q', ( color, tile) => new Queen(color, tile) },
+        };
+        public Piece CreateMovedPiece(Piece piece, Tile newTile)
+        {
+            Type type = piece.GetType();
+            var constructor = type.GetConstructor([type, typeof(Tile)]) ?? throw new InvalidOperationException($"No constructor found for type {type.Name} with parameters (Piece, Tile)");
+            return (Piece)constructor.Invoke([piece, newTile]);
         }
         public Piece CreatePiece(Piece piece)
         {
             Type type = piece.GetType();
-            var constructor = type.GetConstructor(new Type[] { type });
-            if (constructor == null)
-            {
-                throw new InvalidOperationException($"No cloning constructor found for type {type.Name}");
-            }
-            return (Piece)constructor.Invoke(new object[] { piece });
+            var constructor = type.GetConstructor([type]) ?? throw new InvalidOperationException($"No cloning constructor found for type {type.Name}");
+            return (Piece)constructor.Invoke([piece]);
         }
         public Piece CreatePieceColor(char symbol, Tile tile, Color color)
         {
-            symbol = char.ToLower(symbol);
-            if (pieceCreators.TryGetValue(symbol, out var createPiece))
+            if (promotionDictonary.TryGetValue(symbol, out var createPiece))
             {
                 return createPiece(color, tile);
             }

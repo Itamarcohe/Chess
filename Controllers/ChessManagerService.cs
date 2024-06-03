@@ -45,7 +45,6 @@ public class ChessManagerService : IChessManagerService
             var fromTile = ChessNotationConverter.ConvertToTile(request.From);
             var toTile = ChessNotationConverter.ConvertToTile(request.To);
             IBoard currentBoard = _boardHolder.GetBoard();
-
             var movement = _movementFactory.CreateMovement(fromTile, toTile, currentBoard, request.Promotion);
             var validMove = _validator.IsMovementValid(movement, currentBoard);
             if (validMove)
