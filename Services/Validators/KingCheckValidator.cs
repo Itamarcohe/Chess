@@ -26,7 +26,7 @@ namespace Chess_Backend.Services.Validators
         {
             IBoard newSimulatedBoard = _compositeMoveLogic.ApplyMove(movement, currentBoard)!;  // Making the move + Changing the turn
             var currentPlayerKingPosition = newSimulatedBoard.FindOpponentKingPosition(); // getting the current moving player king tile from the new board 
-            foreach (Piece piece in newSimulatedBoard.Pieces.Where(p => p.Color == newSimulatedBoard.CurrentTurnColor)) 
+            foreach (Piece piece in newSimulatedBoard.Pieces.Where(p => p.Color == newSimulatedBoard.CurrentTurnColor))
             {
                 var possibleMoves = _movesGenerator.GetPossibleMoves(piece, newSimulatedBoard);
                 if (possibleMoves.Any(tile => tile.Equals(currentPlayerKingPosition)))

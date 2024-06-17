@@ -7,7 +7,7 @@ namespace Chess_Backend.Models.Pieces
     {
         public Color Color { get; private set; }
         public Tile TilePosition { get; private set; }
-        public bool HasMoved { get; set; }
+        public bool HasMoved { get; private set; }
         protected Piece(Piece otherpiece)
         {
             this.Color = otherpiece.Color;
@@ -25,6 +25,11 @@ namespace Chess_Backend.Models.Pieces
             TilePosition = tilePosition;
             HasMoved = true;
         }
+        //public static Piece CreateMovedPiece(Piece piece, Tile tilePosition)
+        //{
+        //    return new Piece(piece, tilePosition);
+        //}
+
         protected abstract char GetSymbolInternal();
         public char GetSymbol()
         {

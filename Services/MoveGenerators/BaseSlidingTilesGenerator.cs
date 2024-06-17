@@ -11,7 +11,7 @@ namespace Chess_Backend.Services.MoveGenerators
     {
         public abstract (int, int)[] MoveVectors { get; }
         public abstract bool AppliesTo(Piece piece);
-        public virtual List<Tile> GetPossibleMoves(Piece piece, IBoard board)
+        public List<Tile> GetPossibleMoves(Piece piece, IBoard board)
         {
             var moves = new List<Tile>();
             foreach (var (dx, dy) in MoveVectors)

@@ -1,5 +1,6 @@
 ﻿using Chess_Backend.Models;
 using Chess_Backend.Models.Movements;
+using Chess_Backend.Models.Movements.MovementTypes;
 using Chess_Backend.Models.Positions;
 using Chess_Backend.Services.MoveGenerators;
 using System.Linq;
@@ -22,6 +23,6 @@ namespace Chess_Backend.Services.Validators
             var piece = board.GetPieceByTilePosition(movement.From) ?? throw new Exception("No Piece found in the move from position");
             List<Tile> tiles = compositeMovesGenerator.GetPossibleMoves(piece, board);
             return tiles.Contains(movement.To);
-        }
+        }   
     }
 }
