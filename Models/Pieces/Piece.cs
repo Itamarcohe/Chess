@@ -14,12 +14,22 @@ namespace Chess_Backend.Models.Pieces
             this.TilePosition = otherpiece.TilePosition;
             this.HasMoved = otherpiece.HasMoved;
         }
-        protected Piece(Color color, Tile tilePosition, bool hasMoved = false)
+        protected Piece(Color color, Tile tilePosition)
         {
             Color = color;
             TilePosition = tilePosition;
-            HasMoved = hasMoved;
         }
+        protected Piece(Piece piece, Tile tilePosition)
+        {
+            Color = piece.Color;
+            TilePosition = tilePosition;
+            HasMoved = true;
+        }
+        //public static Piece CreateMovedPiece(Piece piece, Tile tilePosition)
+        //{
+        //    return new Piece(piece, tilePosition);
+        //}
+
         protected abstract char GetSymbolInternal();
         public char GetSymbol()
         {

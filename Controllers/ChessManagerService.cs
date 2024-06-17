@@ -6,6 +6,7 @@ using Chess_Backend.Services.BoardServices;
 using Chess_Backend.Services.Validators;
 using Chess_Backend.Utils;
 using Chess_Backend.Services.MoveComposite;
+using Chess_Backend.Services.MovementHistory;
 
 public class ChessManagerService : IChessManagerService
 {
@@ -16,13 +17,16 @@ public class ChessManagerService : IChessManagerService
     private readonly IBoardFactory _boardFactory;
     private readonly IBoardHolder _boardHolder;
     private readonly ICompositeMoveLogic _compositeMoveLogic;
+
+    private readonly IOnMovementFinshedListener _movementHistoryServiceListener;
     public ChessManagerService(ILogger<ChessManagerService> logger,
         MovementFactory movementFactory,
         IBoardParserService boardParserService,
         ICompositeValidator compositeValidator,
         IBoardFactory boardFactory,
         IBoardHolder boardHolder,
-        ICompositeMoveLogic compositeMoveLogic
+        ICompositeMoveLogic compositeMoveLogic,
+        IOnMovementFinshedListener movementHistoryServiceListener
         )
     {
         _logger = logger;
@@ -32,6 +36,7 @@ public class ChessManagerService : IChessManagerService
         _boardFactory = boardFactory;
         _boardHolder = boardHolder;
         _compositeMoveLogic = compositeMoveLogic;
+        _movementHistoryServiceListener = movementHistoryServiceListener;
     }
     public string GetInitialFen()
     {
@@ -45,13 +50,13 @@ public class ChessManagerService : IChessManagerService
             var fromTile = ChessNotationConverter.ConvertToTile(request.From);
             var toTile = ChessNotationConverter.ConvertToTile(request.To);
             IBoard currentBoard = _boardHolder.GetBoard();
-
             var movement = _movementFactory.CreateMovement(fromTile, toTile, currentBoard, request.Promotion);
             var validMove = _validator.IsMovementValid(movement, currentBoard);
             if (validMove)
             {
                 IBoard newBoard = _compositeMoveLogic.ApplyMove(movement, currentBoard)!;
                 _boardHolder.SetBoard(newBoard);
+                _movementHistoryServiceListener.onMovementFinishedListener(movement);
                 return (true, _boardParserService.BoardToFen(newBoard), null);
             }
             Piece? piece = currentBoard.GetPieceByTilePosition(movement.From);

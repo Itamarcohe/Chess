@@ -1,4 +1,5 @@
 ﻿using Chess_Backend.Models;
+using Chess_Backend.Models.Enums;
 using Chess_Backend.Models.Pieces;
 using Chess_Backend.Models.Positions;
 using Chess_Backend.Services.BoardServices;
@@ -8,12 +9,12 @@ namespace Chess_Backend.Services.MoveGenerators
 {
     public abstract class BaseTileGenerator : IMoveToTilesGenerator
     {
-        public abstract (int, int)[] MoveVectors { get; }
+        protected abstract (int, int)[] GetMoveVectors(Color color);
         public abstract bool AppliesTo(Piece piece);
-        public virtual List<Tile> GetPossibleMoves(Piece piece, IBoard board)
+        public List<Tile> GetPossibleMoves(Piece piece, IBoard board)
         {
             var moves = new List<Tile>();
-            foreach (var (dx, dy) in MoveVectors)
+            foreach (var (dx, dy) in GetMoveVectors(piece.Color))
             {
                 int newX = piece.TilePosition.Column + dx;
                 int newY = piece.TilePosition.Row + dy;
@@ -33,6 +34,5 @@ namespace Chess_Backend.Services.MoveGenerators
             }
             return moves;
         }
-
     }
 }

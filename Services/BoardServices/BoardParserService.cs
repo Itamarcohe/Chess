@@ -48,7 +48,6 @@ namespace Chess_Backend.Services.BoardServices
             }
             return rowBuilder.ToString();
         }
-
         private string FormatTurn(Color turn) => turn == Color.White ? " W" : " B";
 
     }

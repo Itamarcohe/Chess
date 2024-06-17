@@ -8,43 +8,21 @@ using Chess_Backend.Models.Positions;
 
 namespace Chess_Backend.Services.MoveComposite
 {
-    public class QueenCastlingMoveLogic : IMoveLogic
+    public class QueenCastlingMoveLogic : BaseMoveLogic
     {
-        private readonly IPieceFactory pieceFactory;
-        public QueenCastlingMoveLogic(IPieceFactory pieceFactory)
-        {
-            this.pieceFactory = pieceFactory;
-        }
-        public bool ShouldApplyMove(Movement movement)
-        {
-            return movement is QueenCastlingMovement;
-        }
-        public IBoard ApplyMove(Movement movement, IBoard board)
-        {
-            return CreateNewBoard(board, movement);
-        }
-        public IBoard CreateNewBoard(IBoard board, Movement movement)
-        {
-            var newPieces = board.Pieces
-                     .Select(piece => TransformPieceForNewBoard(piece, movement, board))
-                     .ToList();
-            var newTurnColor = board.CurrentTurnColor == Color.White ? Color.Black : Color.White;
-            return new Board(newPieces, newTurnColor);
-
-        }
-        private Piece TransformPieceForNewBoard(Piece piece, Movement movement, IBoard board)
+        public QueenCastlingMoveLogic(IPieceFactory pieceFactory) : base(pieceFactory) { }
+        public override bool ShouldApplyMove(Movement movement) => movement is QueenCastlingMovement;
+        protected override Piece TransformPieceForNewBoard(Piece piece, Movement movement, IBoard board)
         {
             if (piece.TilePosition.Equals(movement.From))
             {
-                return pieceFactory.CreatePieceColor(piece.GetSymbol(), movement.To, piece.Color);
+                return pieceFactory.CreateMovedPiece(piece, movement.To);
             }
-
             if (IsRookOnLeftOfKing(piece, movement))
             {
                 var newTile = new Tile(piece.TilePosition.Column + 3, piece.TilePosition.Row);
-                return pieceFactory.CreatePieceColor(piece.GetSymbol(), newTile, piece.Color);
+                return pieceFactory.CreateMovedPiece(piece, newTile);
             }
-
             return pieceFactory.CreatePiece(piece);
         }
         private bool IsRookOnLeftOfKing(Piece piece, Movement movement)

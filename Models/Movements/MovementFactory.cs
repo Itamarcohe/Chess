@@ -1,4 +1,5 @@
-﻿using Chess_Backend.Models.Movements.MovementTypes;
+﻿using Chess_Backend.Models.Enums;
+using Chess_Backend.Models.Movements.MovementTypes;
 using Chess_Backend.Models.Pieces.SubPieces;
 using Chess_Backend.Models.Positions;
 
@@ -7,15 +8,31 @@ namespace Chess_Backend.Models.Movements
     public class MovementFactory
     {
         public MovementFactory() { }
-        public Movement CreateMovement(Tile from, Tile to, IBoard _board, char? promotion = null)
+        public Movement CreateMovement(Tile from, Tile to, IBoard board, char? promotion = null)
         {
-            var gamePiece = _board.GetPieceByTilePosition(from);
-            if (gamePiece == null)
+            var gamePiece = board.GetPieceByTilePosition(from) ?? throw new InvalidOperationException("No piece at the starting position.");
+            var targetPiece = board.GetPieceByTilePosition(to);
+
+            if (gamePiece is Pawn && targetPiece == null && from.Column != to.Column)
             {
-                throw new InvalidOperationException("No piece at the starting position.");
+                return new EnPassantMovement(from, to);
             }
-            var targetPiece = _board.GetPieceByTilePosition(to);
-            if (targetPiece != null && targetPiece!.Color != gamePiece!.Color)
+
+            if (gamePiece is Pawn && Math.Abs(from.Row - to.Row) == 2)
+            {
+                int[] colsToCheck = [1, -1];
+                bool hasSkippedCapture = false;
+                foreach ( var col in colsToCheck )
+                {
+                   if (board.GetPieceByTilePosition(from.Column + col, to.Row) is Pawn pawn && pawn.Color != gamePiece.Color)
+                    {
+                        hasSkippedCapture = true;
+                    }
+                }
+                return new PawnTwoSquareMovement(from, to, hasSkippedCapture);
+            }
+
+            if (targetPiece != null && targetPiece!.Color != gamePiece!.Color && promotion == null)
             {
                 return new AttackMovement(from, to);
             }

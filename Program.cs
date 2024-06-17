@@ -6,6 +6,7 @@ using Chess_Backend.Services.BoardServices;
 using Chess_Backend.Services.MoveComposite;
 using Chess_Backend.Services.MoveGenerators;
 using Chess_Backend.Services.MoveGenerators.SubGenerators;
+using Chess_Backend.Services.MovementHistory;
 using Chess_Backend.Services.Validators;
 
 namespace Chess_Backend
@@ -30,6 +31,10 @@ namespace Chess_Backend
             builder.Services.AddSingleton<IMovementValidator, PlayerTurnValidator>();
             builder.Services.AddSingleton<IMovementValidator, MoveInPossibleMovesValidator>();
             builder.Services.AddSingleton<IMovementValidator, CastlingValidator>();
+            builder.Services.AddSingleton<IMovementValidator, EnPassantValidator>();
+            builder.Services.AddSingleton<IMovementValidator, PawnTwoSquareMoveValidator>();
+            builder.Services.AddSingleton<IMovementValidator, PawnNormalMoveValidator>();
+            builder.Services.AddSingleton<IMovementValidator, PawnAttackValidator>();
             builder.Services.AddSingleton<ICompositeValidator, CompositeValidator>();
 
             // Register individual validators as singletons for the CompositeMoveGenerator
@@ -47,7 +52,14 @@ namespace Chess_Backend
             builder.Services.AddSingleton<IMoveLogic, PawnPromotionMoveLogic>();
             builder.Services.AddSingleton<IMoveLogic, QueenCastlingMoveLogic>();
             builder.Services.AddSingleton<IMoveLogic, KingCastlingMoveLogic>();
+            builder.Services.AddSingleton<IMoveLogic, EnPassantMoveLogic>();
+            builder.Services.AddSingleton<IMoveLogic, PawnTwoSquareMoveLogic>();
             builder.Services.AddSingleton<ICompositeMoveLogic, CompositeMoveLogic>();
+
+
+            builder.Services.AddSingleton<MovementHistoryService>();
+            builder.Services.AddSingleton<IOnMovementFinshedListener>(provider => provider.GetRequiredService<MovementHistoryService>());
+            builder.Services.AddSingleton<IMovementHistoryService>(provider => provider.GetRequiredService<MovementHistoryService>());
 
             builder.Services.AddCors(options =>
             {

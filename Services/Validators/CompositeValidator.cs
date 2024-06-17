@@ -26,5 +26,19 @@ namespace Chess_Backend.Services.Validators
             }
             return true;
         }
+        public bool IsMovementValidFilterList(Movement movement, IBoard currentBoard, IEnumerable<Type> filterList)
+        {
+            foreach (IMovementValidator validator in _movementValidators)
+            {
+                if (!filterList.Any(type => type == validator.GetType()) && validator.ShouldValidateMove(movement))
+                {
+                    if (!validator.IsMovementValid(movement, currentBoard))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 }
