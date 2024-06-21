@@ -33,9 +33,16 @@ namespace Chess_Backend
             builder.Services.AddSingleton<IMovementValidator, CastlingValidator>();
             builder.Services.AddSingleton<IMovementValidator, EnPassantValidator>();
             builder.Services.AddSingleton<IMovementValidator, PawnTwoSquareMoveValidator>();
-            builder.Services.AddSingleton<IMovementValidator, PawnNormalMoveValidator>();
             builder.Services.AddSingleton<IMovementValidator, PawnAttackValidator>();
             builder.Services.AddSingleton<ICompositeValidator, CompositeValidator>();
+
+            //Attempt to add validator provider to get hte list of the whole other validators
+            builder.Services.AddSingleton<IValidatorProvider, ValidatorProvider>();
+            builder.Services.AddSingleton<Lazy<IValidatorProvider>>(sp =>
+            {
+                return new Lazy<IValidatorProvider>(() => sp.GetRequiredService<IValidatorProvider>());
+            });
+
 
             // Register individual validators as singletons for the CompositeMoveGenerator
             builder.Services.AddSingleton<IMoveToTilesGenerator, RookTilesGenerator>();

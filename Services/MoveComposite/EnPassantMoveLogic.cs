@@ -16,7 +16,6 @@ namespace Chess_Backend.Services.MoveComposite
         }
         protected override IBoard CreateNewBoard(IBoard board, Movement movement, params Tile[] excludeTiles)
         {
-            // remove skipped pawn
             return base.CreateNewBoard(board, movement, movementHistoryService.getLast().To);
         }
         public override bool ShouldApplyMove(Movement movement) => movement is EnPassantMovement;

@@ -19,7 +19,7 @@ namespace Chess_Backend.Services.Validators
         public bool ShouldValidateMove(Movement movement) => movement is EnPassantMovement;
         public bool IsMovementValid(Movement movement, IBoard currentBoard)
         {
-            if (_history == null || _history.getLast() is not PawnTwoSquareMovement lastMove || !lastMove.HasSkippedCapture)
+            if (_history == null || _history.getLast() is null || _history.getLast() is not PawnTwoSquareMovement lastMove || !lastMove.HasSkippedCapture)
             {
                 return false;
             }
