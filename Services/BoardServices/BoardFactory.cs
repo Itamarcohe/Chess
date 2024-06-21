@@ -34,7 +34,7 @@ namespace Chess_Backend.Services.BoardServices
         private static Color ToggleColor(Color currentColor) => currentColor == Color.White ? Color.Black : Color.White;
         public IBoard InitializeNewBoard()
         {
-            List<Piece> pieces = new List<Piece>();
+            List<Piece> pieces = [];
             SetupInitialRow(Color.White, 1, pieces);
             SetupBackRow(Color.White, 0, pieces);
             SetupInitialRow(Color.Black, 6, pieces);

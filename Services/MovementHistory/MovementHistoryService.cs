@@ -5,7 +5,6 @@ namespace Chess_Backend.Services.MovementHistory
 {
     public class MovementHistoryService : IMovementHistoryService, IOnMovementFinshedListener
     {
-
         private ImmutableList<Movement> _movementHistory;
         public MovementHistoryService()
         {
@@ -19,8 +18,12 @@ namespace Chess_Backend.Services.MovementHistory
             }
             _movementHistory = _movementHistory.Add(movement);
         }
-        public Movement getLast()
+        public Movement? getLast()
         {
+            if (!_movementHistory.Any())
+            {
+                return null;
+            }
             return _movementHistory.Last();
         }
         public ImmutableList<Movement> getHistory()

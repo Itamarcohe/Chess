@@ -1,20 +1,19 @@
 ﻿using Chess_Backend.Models.Movements;
 using Chess_Backend.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
 
 namespace Chess_Backend.Services.Validators
 {
     public class CompositeValidator : ICompositeValidator
     {
-        private IEnumerable<IMovementValidator> _movementValidators;
-        public CompositeValidator(IEnumerable<IMovementValidator> movementValidators)
+        private Lazy<IValidatorProvider> _validatorProvider;
+
+        public CompositeValidator(Lazy<IValidatorProvider> validatorProvider)
         {
-            _movementValidators = movementValidators;
+            _validatorProvider = validatorProvider;
         }
         public bool IsMovementValid(Movement movement, IBoard currentBoard)
         {
-            foreach (IMovementValidator validator in _movementValidators)
+            foreach (IMovementValidator validator in _validatorProvider.Value.GetAllValidators())
             {
                 if (validator.ShouldValidateMove(movement))
                 {
@@ -28,7 +27,7 @@ namespace Chess_Backend.Services.Validators
         }
         public bool IsMovementValidFilterList(Movement movement, IBoard currentBoard, IEnumerable<Type> filterList)
         {
-            foreach (IMovementValidator validator in _movementValidators)
+            foreach (IMovementValidator validator in _validatorProvider.Value.FilterValidatorsByList(filterList))
             {
                 if (!filterList.Any(type => type == validator.GetType()) && validator.ShouldValidateMove(movement))
                 {
